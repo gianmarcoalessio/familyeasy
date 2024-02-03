@@ -43,13 +43,13 @@ export default express.Router()
             let tm = await User.findOne({username: username.toLowerCase()});
 
             if (!tm?._id){
-                throw new Error("Password errata o utente non presente. Ti invitiamo a cambiare password o a regsitrarsi");
+                throw new Error("Password errata o utente non presente. Ti invitiamo a cambiare password o a regitrarsi");
             }
             if (!bcrypt.compareSync(password, tm.password)){ // confrontiamo i due hash delle password in modo tale che siano uguali, una hashata durante il signup e l'altro è in chiaro e le confronta
                 throw new Error("Password errata"); 
             }
             
-            let token = jwt.sign({id: tm._id}, process.env.JWT_SECRET, {expiresIn: 3600*24}); //dopo un giorno devi rifare il login
+            let token = jwt.sign({id: tm._id}, process.env.JWT_SECRET, {expiresIn: 3600*48}); //dopo un giorno devi rifare il login
 
 
             res.send({token,username:tm.username,firstname:tm.firstname,lastname:tm.lastname}); //tutte le informazioni dell'utente più il token per collegare tutti i vari servizi se sono autorizzati

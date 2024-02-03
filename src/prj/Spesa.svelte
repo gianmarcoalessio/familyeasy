@@ -2,6 +2,7 @@
 <script>
     import { onMount } from 'svelte';
     import Input from '$daisi/Input.svelte'; // Assicurati di avere questo componente o adattalo al tuo caso
+    import Partecipanti from './Partecipanti.svelte'; // Assicurati di avere questo componente o adattalo al tuo caso  
   
     export let open = true;
     let descrizione = '';
@@ -69,7 +70,7 @@
         <Input bind:value={importoTotale} placeholder="Importo Totale" inputclass="input-primary" />
         <div>Le spese sono condivise equamente per default</div>
         
-        <!-- Qui potresti voler implementare la logica per gestire la visualizzazione e la selezione dei partecipanti -->
+        <Partecipanti />
         
         <button class="btn btn-primary w-full" on:click={aggiungiSpesa}>Aggiungi</button>
       </div>

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { addressSchema } from "./address.js";
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -12,7 +11,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         capitalize: true,
     },
-    lastname: String,
+    lastname: {
+        type: String,
+        capitalize: true,
+    },
     // email: {
     //     type: String,
     //     required: true,
@@ -25,8 +27,6 @@ const UserSchema = new mongoose.Schema({
     // },
     password: {
         type: String,
-
-
     },
     createAt: {
         type: Date,
@@ -36,11 +36,28 @@ const UserSchema = new mongoose.Schema({
     modifiedAt: {
         type: Date,
         default: () => Date.now()
-    },
-    userlink: mongoose.SchemaTypes.ObjectId,
-    hobbies: [String],
-    address: addressSchema
+    }
 })
 
+//cascade remove of the expenses when a user is removed: da testare
+UserSchema.pre('deleteMany', function(next) {
+    // 'this' refers to the User document being removed
+    Expense.deleteMany({ user: this._id }, err => {
+        if (err) {
+            next(err);
+        } else {
+            next();
+        }
+    });
+    sharedExpenses.deleteMany({ user: this._id }, err => {
+        if (err) {
+            next(err);
+        } else {
+            next();
+        }
+    })
 
-export default mongoose.model("user", UserSchema)    
+});
+
+export default mongoose.model("User", UserSchema)   
+

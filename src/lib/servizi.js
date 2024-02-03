@@ -53,12 +53,18 @@ export async function login(user) {
     let data = response.data;
     bearer = data.token; // memorizzo il token di autenticazione
     datilogin.set(response.data); // memorizzo i dati dell'utente loggato
+    localStorage.setItem('token', JSON.stringify(response.data,null,2))
     return data;
 }
 
 export async function logout() {
     bearer = null; // resetto il token di autenticazione
+    localStorage.removeItem('token') // togliamo anche il token
     datilogin.set({}); // resetto i dati dell'utente loggato 
+}
+
+export function setbearer(token){
+    bearer = token;
 }
 
 
