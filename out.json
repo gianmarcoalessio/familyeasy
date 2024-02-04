@@ -1,0 +1,181 @@
+[
+  {
+    "_id": "65bf2d36cf230628a59e1704",
+    "usercrea": {
+      "_id": "65bf2d36cf230628a59e16ee",
+      "username": "jaker",
+      "firstname": "Jake",
+      "lastname": "Relling"
+    },
+    "date": "2023-06-01T00:00:00.000Z",
+    "description": "Spesa settimanale al supermercato",
+    "category": {
+      "_id": "65bf2d36cf230628a59e16f8",
+      "name": "Spesa"
+    },
+    "quote": [
+      {
+        "user": {
+          "_id": "65bf2d36cf230628a59e16ee",
+          "username": "jaker",
+          "firstname": "Jake",
+          "lastname": "Relling"
+        },
+        "cost": 95,
+        "rimborso": false,
+        "_id": "65bf2d36cf230628a59e1705"
+      }
+    ],
+    "createAt": "2024-02-04T06:22:46.121Z",
+    "totalcost": 95,
+    "id": "65bf2d36cf230628a59e1704"
+  },
+  {
+    "_id": "65bf2d36cf230628a59e1707",
+    "usercrea": {
+      "_id": "65bf2d36cf230628a59e16ee",
+      "username": "jaker",
+      "firstname": "Jake",
+      "lastname": "Relling"
+    },
+    "date": "2023-06-01T00:00:00.000Z",
+    "description": "Rimborso spes altri",
+    "category": {
+      "_id": "65bf2d36cf230628a59e16f8",
+      "name": "Spesa"
+    },
+    "quote": [
+      {
+        "user": {
+          "_id": "65bf2d36cf230628a59e16ee",
+          "username": "jaker",
+          "firstname": "Jake",
+          "lastname": "Relling"
+        },
+        "cost": 65,
+        "rimborso": true,
+        "_id": "65bf2d36cf230628a59e1708"
+      },
+      {
+        "user": {
+          "_id": "65bf2d36cf230628a59e16f2",
+          "username": "sully",
+          "firstname": "James",
+          "lastname": "Sullivan"
+        },
+        "cost": 25,
+        "rimborso": false,
+        "_id": "65bf2d36cf230628a59e1709"
+      },
+      {
+        "user": {
+          "_id": "65bf2d36cf230628a59e16f0",
+          "username": "mikew",
+          "firstname": "Mike",
+          "lastname": "Wazowski"
+        },
+        "cost": 40,
+        "rimborso": false,
+        "_id": "65bf2d36cf230628a59e170a"
+      }
+    ],
+    "createAt": "2024-02-04T06:22:46.128Z",
+    "totalcost": 0,
+    "id": "65bf2d36cf230628a59e1707"
+  },
+  {
+    "_id": "65bf2d36cf230628a59e170c",
+    "usercrea": {
+      "_id": "65bf2d36cf230628a59e16ee",
+      "username": "jaker",
+      "firstname": "Jake",
+      "lastname": "Relling"
+    },
+    "date": "2023-06-10T00:00:00.000Z",
+    "description": "Libri e materiale di lettura",
+    "category": {
+      "_id": "65bf2d36cf230628a59e1700",
+      "name": "Altro"
+    },
+    "quote": [
+      {
+        "user": {
+          "_id": "65bf2d36cf230628a59e16ee",
+          "username": "jaker",
+          "firstname": "Jake",
+          "lastname": "Relling"
+        },
+        "cost": 50,
+        "rimborso": false,
+        "_id": "65bf2d36cf230628a59e170d"
+      },
+      {
+        "user": {
+          "_id": "65bf2d36cf230628a59e16f2",
+          "username": "sully",
+          "firstname": "James",
+          "lastname": "Sullivan"
+        },
+        "cost": 40,
+        "rimborso": false,
+        "_id": "65bf2d36cf230628a59e170e"
+      }
+    ],
+    "createAt": "2024-02-04T06:22:46.134Z",
+    "totalcost": 90,
+    "id": "65bf2d36cf230628a59e170c"
+  },
+  {
+    "_id": "65bf2d36cf230628a59e1710",
+    "usercrea": {
+      "_id": "65bf2d36cf230628a59e16ee",
+      "username": "jaker",
+      "firstname": "Jake",
+      "lastname": "Relling"
+    },
+    "date": "2023-06-09T00:00:00.000Z",
+    "description": "Biglietti per viaggi occasionali",
+    "category": {
+      "_id": "65bf2d36cf230628a59e16fe",
+      "name": "Trasporti"
+    },
+    "quote": [
+      {
+        "user": {
+          "_id": "65bf2d36cf230628a59e16ee",
+          "username": "jaker",
+          "firstname": "Jake",
+          "lastname": "Relling"
+        },
+        "cost": 20,
+        "rimborso": false,
+        "_id": "65bf2d36cf230628a59e1711"
+      },
+      {
+        "user": {
+          "_id": "65bf2d36cf230628a59e16f2",
+          "username": "sully",
+          "firstname": "James",
+          "lastname": "Sullivan"
+        },
+        "cost": 20,
+        "rimborso": false,
+        "_id": "65bf2d36cf230628a59e1712"
+      },
+      {
+        "user": {
+          "_id": "65bf2d36cf230628a59e16f4",
+          "username": "randall",
+          "firstname": "Randall",
+          "lastname": "Boggs"
+        },
+        "cost": 20,
+        "rimborso": false,
+        "_id": "65bf2d36cf230628a59e1713"
+      }
+    ],
+    "createAt": "2024-02-04T06:22:46.139Z",
+    "totalcost": 60,
+    "id": "65bf2d36cf230628a59e1710"
+  }
+]

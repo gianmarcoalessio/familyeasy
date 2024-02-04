@@ -15,10 +15,10 @@ function checkUser(req) {
 
 export default express.Router()
     // Auth Routes
-    .post('/auth/signup', async (req, res,next) => {
+    .post('/auth/signup', async (req, res, next) => {
         try {
             let user = req.body;
-            if(!user.username || !user.password){
+            if (!user.username || !user.password) {
                 throw new Error("Username e password sono obbligatori");
             }
             let hash = bcrypt.hashSync(user.password, saltRounds);
@@ -28,31 +28,31 @@ export default express.Router()
             delete result.password; // non vogliamo che la password venga restituita al client
 
             // handle sign up logic here
-            res.send({token: result});
+            res.send({ token: result });
         } catch (error) {
-            next(error);s
+            next(error); s
         }
     })
-    .post('/auth/signin', async (req, res,next) => {
+    .post('/auth/signin', async (req, res, next) => {
         try {
-            let {username,password} = req.body;
-            if(!username || !password){
+            let { username, password } = req.body;
+            if (!username || !password) {
                 throw new Error("Username e password sono obbligatori");
             }
 
-            let tm = await User.findOne({username: username.toLowerCase()});
+            let tm = await User.findOne({ username: username.toLowerCase() });
 
-            if (!tm?._id){
+            if (!tm?._id) {
                 throw new Error("Password errata o utente non presente. Ti invitiamo a cambiare password o a regitrarsi");
             }
-            if (!bcrypt.compareSync(password, tm.password)){ // confrontiamo i due hash delle password in modo tale che siano uguali, una hashata durante il signup e l'altro è in chiaro e le confronta
-                throw new Error("Password errata"); 
+            if (!bcrypt.compareSync(password, tm.password)) { // confrontiamo i due hash delle password in modo tale che siano uguali, una hashata durante il signup e l'altro è in chiaro e le confronta
+                throw new Error("Password errata");
             }
-            
-            let token = jwt.sign({id: tm._id}, process.env.JWT_SECRET, {expiresIn: 3600*48}); //dopo un giorno devi rifare il login
+
+            let token = jwt.sign({ id: tm._id }, process.env.JWT_SECRET, { expiresIn: 3600 * 48 }); //dopo un giorno devi rifare il login
 
 
-            res.send({token,username:tm.username,firstname:tm.firstname,lastname:tm.lastname}); //tutte le informazioni dell'utente più il token per collegare tutti i vari servizi se sono autorizzati
+            res.send({ token, username: tm.username, firstname: tm.firstname, lastname: tm.lastname }); //tutte le informazioni dell'utente più il token per collegare tutti i vari servizi se sono autorizzati
 
         } catch (error) {
             setTimeout(() => {
@@ -60,22 +60,22 @@ export default express.Router()
             }, 1000); // per evitare attacchi brute force
         }
     })
-    
+
     // Budget Routes
-    .get('/budget/', async (req, res,next) => {
+    .get('/budget/', async (req, res, next) => {
         try {
             checkUser(req);
             db.query('SELECT nome,cognome from utenti', function (error, results, fields) {
                 if (error) throw error;
-                res.send(JSON.stringify({results,fields}))
-              });
+                res.send(JSON.stringify({ results, fields }))
+            });
             // handle getting all budgets logic here
         } catch (error) {
             next(error);
         }
     })
-    
-    .get('/budget/:year', async (req, res,next) => {
+
+    .get('/budget/:year', async (req, res, next) => {
         try {
             checkUser(req);
             const { year } = req.params;
@@ -85,8 +85,8 @@ export default express.Router()
             next(error);
         }
     })
-    
-    .get('/budget/:year/:month', async (req, res,next) => {
+
+    .get('/budget/:year/:month', async (req, res, next) => {
         try {
             checkUser(req);
             const { year, month } = req.params;
@@ -96,8 +96,8 @@ export default express.Router()
             next(error);
         }
     })
-    
-    .get('/budget/:year/:month/:id', async (req, res,next) => {
+
+    .get('/budget/:year/:month/:id', async (req, res, next) => {
         try {
             checkUser(req);
             const { year, month, id } = req.params;
@@ -107,8 +107,8 @@ export default express.Router()
             next(error);
         }
     })
-    
-    .post('/budget/:year/:month', async (req, res,next) => {
+
+    .post('/budget/:year/:month', async (req, res, next) => {
         try {
             checkUser(req);
             const { year, month } = req.params;
@@ -118,8 +118,8 @@ export default express.Router()
             next(error);
         }
     })
-    
-    .put('/budget/:year/:month/:id', async (req, res,next) => {
+
+    .put('/budget/:year/:month/:id', async (req, res, next) => {
         try {
             checkUser(req);
             const { year, month, id } = req.params;
@@ -129,8 +129,8 @@ export default express.Router()
             next(error);
         }
     })
-    
-    .delete('/budget/:year/:month/:id', async (req, res,next) => {
+
+    .delete('/budget/:year/:month/:id', async (req, res, next) => {
         try {
             checkUser(req);
             const { year, month, id } = req.params;
@@ -140,9 +140,9 @@ export default express.Router()
             next(error);
         }
     })
-    
+
     // Balance Routes
-    .get('/balance', async (req, res,next) => {
+    .get('/balance', async (req, res, next) => {
         try {
             checkUser(req);
             // handle getting balance summary logic here
@@ -151,8 +151,8 @@ export default express.Router()
             next(error);
         }
     })
-    
-    .get('/balance/:id', async (req, res,next) => {
+
+    .get('/balance/:id', async (req, res, next) => {
         try {
             checkUser(req);
             const { id } = req.params;
@@ -162,9 +162,9 @@ export default express.Router()
             next(error);
         }
     })
-    
+
     // Budget Search
-    .get('/budget/search', async (req, res,next) => {
+    .get('/budget/search', async (req, res, next) => {
         try {
             checkUser(req);
             const { q: query } = req.query;
@@ -174,9 +174,9 @@ export default express.Router()
             next(error);
         }
     })
-    
+
     // User Info
-    .get('/budget/whoami', async (req, res,next) => {
+    .get('/budget/whoami', async (req, res, next) => {
         try {
             checkUser(req);
             // handle getting user info logic here
@@ -185,21 +185,23 @@ export default express.Router()
             next(error);
         }
     })
-    
+
     // User Search
-    .get('/users/search', async (req, res,next) => {
+    .get('/users/search', async (req, res, next) => {
         try {
-            checkUser(req); 
-            const {q}= req.query;
+            checkUser(req);
+            const { q } = req.query;
             let query;
             if (q) {
                 query = new RegExp(q, 'i'); // ricerca parziale all'interno di username, firstname, lastaname
             }
-            var users = query? await User.find({    $or: [
-                { username: query },
-                { firstname: query },
-                { lastname: query }
-            ]}) : await User.find();
+            var users = query ? await User.find({
+                $or: [
+                    { username: query },
+                    { firstname: query },
+                    { lastname: query }
+                ]
+            }) : await User.find();
             // handle user search logic here
             res.send(users);
         } catch (error) {

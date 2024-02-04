@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
 let Schema = mongoose.Schema;
 
-const QuoteSchema = new mongoose.Schema({
-    user:{
-        type: Schema.Types.ObjectId, 
+
+export const QuoteSchema = new mongoose.Schema({
+    user: {
+        type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    cost: { 
+    cost: {
         type: Number,
         required: true
     },
@@ -18,27 +19,27 @@ const QuoteSchema = new mongoose.Schema({
     },
 })
 
-const ExpensesSchema = new mongoose.Schema({
-    usercrea:{
-        type: Schema.Types.ObjectId, 
+export const ExpensesSchema = new mongoose.Schema({
+    usercrea: {
+        type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    date:{
+    date: {
         type: Date,
         required: true,
         default: () => Date.now()
     },
-    description:{
+    description: {
         type: String,
         required: true
     },
-    category:{
-        type: Schema.Types.ObjectId, 
+    category: {
+        type: Schema.Types.ObjectId,
         ref: 'Categories',
         required: true
     },
-    quote:[{
+    quote: [{
         type: QuoteSchema // Un vettore di quote all'interno della tabella come campo per ciascuna spesa
     }],
     createAt: {
@@ -48,8 +49,32 @@ const ExpensesSchema = new mongoose.Schema({
     },
 })
 
-ExpensesSchema.virtual('totalcost').get(function() {
-    return this.quote.reduce((acc, quote) => acc + quote.rimborso? - quote.cost : quote.cost , 0);
+ExpensesSchema.virtual('totalcost').get(function () {
+    return this.quote.reduce((acc, quote) => acc + (quote.rimborso ? -quote.cost : quote.cost), 0);
 });
+
+ExpensesSchema.set('toJSON', {
+    virtuals: true, // Assicurati che i campi virtuali siano inclusi in JSON.stringify
+    transform: (doc, ret) => {
+        // delete ret._id; // Opzionale: rimuove _id e altri campi se desiderato
+        delete ret.__v;
+        // Puoi aggiungere qui altre trasformazioni se necessario
+    }
+});
+
+ExpensesSchema.pre(['find', 'findOne'], function (next) {
+    this.populate([{
+        path: 'usercrea',
+        select: '_id lastname firstname username' // Specifica i campi da includere
+    }, {
+        path: 'quote.user',
+        select: '_id lastname firstname username' // Specifica i campi da includere
+    }, {
+        path: "category",
+        select: '_id name' // Specifica i campi da includere
+    }]);
+    next();
+});
+
 
 export default mongoose.model("Expenses", ExpensesSchema)

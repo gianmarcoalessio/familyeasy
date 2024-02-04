@@ -40,24 +40,26 @@ const UserSchema = new mongoose.Schema({
 })
 
 //cascade remove of the expenses when a user is removed: da testare
-UserSchema.pre('deleteMany', function(next) {
-    // 'this' refers to the User document being removed
-    Expense.deleteMany({ user: this._id }, err => {
-        if (err) {
-            next(err);
-        } else {
-            next();
-        }
-    });
-    sharedExpenses.deleteMany({ user: this._id }, err => {
-        if (err) {
-            next(err);
-        } else {
-            next();
-        }
-    })
 
-});
+//UserSchema.pre('deleteMany', function (next) {
+// 'this' refers to the User document being removed
+/*
+  Expense.deleteMany({ user: this._id }, err => {
+      if (err) {
+          next(err);
+      } else {
+          next();
+      }
+  });
+  sharedExpenses.deleteMany({ user: this._id }, err => {
+      if (err) {
+          next(err);
+      } else {
+          next();
+      }
+  })
+*/
+//});
 
-export default mongoose.model("User", UserSchema)   
+export default mongoose.model("User", UserSchema)
 

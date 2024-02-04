@@ -1,0 +1,129 @@
+{
+  "pass": "$2a$10$q0uZwRFyCjCIyt0N2.Sf1eS6qjxwX4LbZCMEfDK9WXUdQjwBbCkJe",
+  "users": [
+    {
+      "username": "jaker",
+      "firstname": "Jake",
+      "lastname": "Relling"
+    },
+    {
+      "username": "mikew",
+      "firstname": "Mike",
+      "lastname": "Wazowski"
+    },
+    {
+      "username": "sully",
+      "firstname": "James",
+      "lastname": "Sullivan"
+    },
+    {
+      "username": "randall",
+      "firstname": "Randall",
+      "lastname": "Boggs"
+    },
+    {
+      "username": "boo",
+      "firstname": "Mary",
+      "lastname": "Gibbs"
+    }
+  ],
+  "cats": [
+    {
+      "name": "Spesa"
+    },
+    {
+      "name": "Utilità"
+    },
+    {
+      "name": "Affitto"
+    },
+    {
+      "name": "Trasporti"
+    },
+    {
+      "name": "Altro"
+    },
+    {
+      "name": "Salute"
+    }
+  ],
+  "expenses": [
+    {
+      "usercrea": "jaker",
+      "date": "2023-06-01",
+      "category": "spesa",
+      "description": "Spesa settimanale al supermercato",
+      "quote": [
+        {
+          "user": "jaker",
+          "cost": 95,
+          "rimborso": false
+        }
+      ]
+    },
+    {
+      "usercrea": "jaker",
+      "date": "2023-06-01",
+      "category": "spesa",
+      "description": "Rimborso spes altri",
+      "quote": [
+        {
+          "user": "jaker",
+          "cost": 65,
+          "rimborso": true
+        },
+        {
+          "user": "sully",
+          "cost": 25,
+          "rimborso": false
+        },
+        {
+          "user": "mikew",
+          "cost": 40,
+          "rimborso": false
+        }
+      ]
+    },
+    {
+      "usercrea": "jaker",
+      "date": "2023-06-10",
+      "category": "Altro",
+      "description": "Libri e materiale di lettura",
+      "quote": [
+        {
+          "user": "jaker",
+          "cost": 50,
+          "rimborso": false
+        },
+        {
+          "user": "sully",
+          "cost": 40,
+          "rimborso": false
+        }
+      ]
+    },
+    {
+      "usercrea": "jaker",
+      "date": "2023-06-09",
+      "category": "Trasporti",
+      "description": "Biglietti per viaggi occasionali",
+      "quote": [
+        {
+          "user": "jaker",
+          "cost": 20,
+          "rimborso": false
+        },
+        {
+          "user": "sully",
+          "cost": 20,
+          "rimborso": false
+        },
+        {
+          "user": "randall",
+          "cost": 20,
+          "rimborso": false
+        }
+      ]
+    }
+  ]
+}

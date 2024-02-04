@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const CategoriesSchema = new mongoose.Schema({
-    name:{
+    name: {
         type: String,
         required: true
     },
@@ -12,14 +12,14 @@ const CategoriesSchema = new mongoose.Schema({
     }
 })
 
-//cascade remove of the expenses and set null to all the schema da refers to that specific category: da testare
-CategoriesSchema.pre('deleteMany', function(next) {
-    const categoryId = this._id;
-    mongoose.model('Expense').updateMany(
-        { category: categoryId }, 
-        { $set: { category: null } }, 
-        next
-    );
-});
+// //cascade remove of the expenses and set null to all the schema da refers to that specific category: da testare
+// CategoriesSchema.pre('deleteMany', function(next) {
+//     const categoryId = this._id;
+//     mongoose.model('Expense').updateMany(
+//         { category: categoryId }, 
+//         { $set: { category: null } }, 
+//         next
+//     );
+// });
 
 export default mongoose.model("Categories", CategoriesSchema)
