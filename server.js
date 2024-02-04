@@ -48,6 +48,6 @@ app.use('/', express.static("./public"));
 
 app.listen(3000, async () => {
   console.log('Server running on port 3000')
-  await mongoose.connect('mongodb://192.168.20.6/familyeasy')
+  await mongoose.connect('mongodb://localhost/familyeasy')
   console.log("connected");
 })

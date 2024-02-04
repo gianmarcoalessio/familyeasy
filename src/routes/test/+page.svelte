@@ -1,9 +1,12 @@
 <script>
-    import Input from '$daisi/Input.svelte';
     import axios from 'axios';
     import Navigator from '$prj/Navigator.svelte';
+    import Categoria from '$prj/Categoria.svelte';
+    import Table from '$prj/Table.svelte';
+    import Spesamodifica from '$prj/Spesamodifica.svelte';
 
     let utenti = [];
+    let categoria = {}
 
     async function dammiUtenti() {
         try {
@@ -14,6 +17,11 @@
             utenti = err.message;
         }
     }
+
+
+
+
+
 </script>
 
 <div class="flex flex-col space-y-4 mx-24 mt-4">
@@ -22,8 +30,14 @@
     <div class="text-6xl font-bold text-third">test</div>
 </div>
 
-<div class="flex flex-col justify-center items-center w-1/4 space-y-4 mt-24 m-auto">
+<div class="flex flex-col justify-center items-center w-1/2 space-y-4 mt-24 m-auto">
 
     <button on:click={dammiUtenti}>Prova</button>
-    <pre>{JSON.stringify(utenti, null, 2)}</pre>
+    <pre>{JSON.stringify(categoria, null, 2)}</pre>
+
+   <Categoria bind:categoria />
+
+   <Spesamodifica />
+
+
 </div>

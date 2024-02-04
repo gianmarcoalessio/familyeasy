@@ -75,4 +75,20 @@ export async function dammiUtenti(q) {
     return response.data; // Assuming the user data is directly in the response data
 }
 
+export async function dammiCategorie(){
+    const response = await axios.get(`${baseurl}/api/categories`, getconfig());
+    return response.data;
+}
+
+export async function dammiSpese(){
+    const response = await axios.get(`${baseurl}/api/budget`, getconfig());
+    return response.data;
+}
+
+export async function daiSpesa(){
+    const response = await axios.post(`${baseurl}/api/budget/:year/:month`, getconfig());
+    return response.data;
+}
+
+
 

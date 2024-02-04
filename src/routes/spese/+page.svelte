@@ -17,6 +17,8 @@
     <Spesa open={ismodal} on:close={()=>{ismodal=false}} />
     <Input placeholder="Cerca la spesa" inputclass="my-4 mx-2" />
     <Filtraggio />
+    <Table />
 </div>
 
-<Table />
+
+

@@ -1,0 +1,21 @@
+{
+    "date": "2024-09-01T00:00:00.000Z",
+    "description": "ciao",
+    "category": {
+      "_id": "65bf3d37d8b4b7a98c740487",
+      "name": "Spesa"
+    },
+    "quote": [
+      {
+        "user": {
+          "_id": "65bf3d37d8b4b7a98c74047d",
+          "username": "jaker",
+          "firstname": "Jake",
+          "lastname": "Relling"
+        },
+        "cost": 65,
+        "rimborso": false,
+        "_id": "65bf3d37d8b4b7a98c740497"
+      }
+    ]
+  }

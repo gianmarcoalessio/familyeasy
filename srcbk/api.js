@@ -1,8 +1,9 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import User from './db/users.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import Categories from './db/categories.js';
+import Expenses from './db/expenses.js';
 
 const saltRounds = 10;
 
@@ -49,7 +50,7 @@ export default express.Router()
                 throw new Error("Password errata");
             }
 
-            let token = jwt.sign({ id: tm._id }, process.env.JWT_SECRET, { expiresIn: 3600 * 48 }); //dopo un giorno devi rifare il login
+            let token = jwt.sign({ _id: tm._id }, process.env.JWT_SECRET, { expiresIn: 3600 * 48 }); //dopo un giorno devi rifare il login
 
 
             res.send({ token, username: tm.username, firstname: tm.firstname, lastname: tm.lastname }); //tutte le informazioni dell'utente più il token per collegare tutti i vari servizi se sono autorizzati
@@ -65,11 +66,8 @@ export default express.Router()
     .get('/budget/', async (req, res, next) => {
         try {
             checkUser(req);
-            db.query('SELECT nome,cognome from utenti', function (error, results, fields) {
-                if (error) throw error;
-                res.send(JSON.stringify({ results, fields }))
-            });
-            // handle getting all budgets logic here
+            const user = req.user
+            res.send(await Expenses.find({usercrea: user._id}).exec());
         } catch (error) {
             next(error);
         }
@@ -79,8 +77,22 @@ export default express.Router()
         try {
             checkUser(req);
             const { year } = req.params;
-            // handle getting budgets by year logic here
-            res.send(`Get budgets for year: ${year}`);
+            const user = req.user;
+    
+            // Creare le date di inizio e fine per l'anno specificato
+            const startDate = new Date(year, 0, 1); // 1 gennaio dell'anno
+            const endDate = new Date(year, 11, 31, 23, 59, 59); // 31 dicembre dell'anno
+    
+            // Eseguire la query filtrando per usercrea e intervallo di date
+            const budgets = await Expenses.find({
+                usercrea: user._id,
+                date: {
+                    $gte: startDate,
+                    $lte: endDate
+                }
+            }).exec();
+    
+            res.send(budgets);
         } catch (error) {
             next(error);
         }
@@ -90,30 +102,68 @@ export default express.Router()
         try {
             checkUser(req);
             const { year, month } = req.params;
-            // handle getting budgets by year and month logic here
-            res.send(`Get budgets for year: ${year}, month: ${month}`);
+            const user = req.user;
+    
+            // Convertire l'anno e il mese dai parametri in numeri
+            const yearNum = parseInt(year, 10);
+            const monthNum = parseInt(month, 10) - 1; // I mesi in JavaScript partono da 0
+    
+            // Calcolare la data di inizio e fine del mese specificato
+            const startDate = new Date(yearNum, monthNum, 1);
+            const endDate = new Date(yearNum, monthNum + 1, 0, 23, 59, 59); // L'ultimo giorno del mese
+    
+            // Eseguire la query filtrando per usercrea e intervallo di date
+            const budgets = await Expenses.find({
+                usercrea: user._id,
+                date: {
+                    $gte: startDate,
+                    $lte: endDate
+                }
+            }).exec();
+    
+            res.send(budgets);
         } catch (error) {
             next(error);
         }
     })
+    
 
     .get('/budget/:year/:month/:id', async (req, res, next) => {
         try {
             checkUser(req);
             const { year, month, id } = req.params;
-            // handle getting a specific budget logic here
-            res.send(`Get budget for year: ${year}, month: ${month}, id: ${id}`);
+            const user = req.user;
+    
+            // Trova la spesa specifica per ID
+            const expense = await Expenses.findById(id).exec();
+    
+            // Verifica se la spesa appartiene all'utente, all'anno e al mese specificati
+            if (!expense) {
+                return res.status(404).send({ message: "Spesa non trovata." });
+            }
+            res.send(expense);
         } catch (error) {
             next(error);
         }
     })
+    
 
     .post('/budget/:year/:month', async (req, res, next) => {
         try {
             checkUser(req);
             const { year, month } = req.params;
-            // handle creating a new budget logic here
-            res.send(`Create budget for year: ${year}, month: ${month}`);
+            const data = req.body;
+
+            if(!data){
+                throw new Error("Dati mancanti");
+            }
+
+            data.usercrea = req.user._id;
+            // data.date = new Date(year, month - 1, 1); // Creare una data per il primo giorno del mese specificato
+            const expense = await Expenses.create(data);
+            let letto = await Expenses.findById(expense._id).exec(); // perché me lo torna indietro già formattato 
+
+            res.send(letto);
         } catch (error) {
             next(error);
         }
@@ -122,9 +172,23 @@ export default express.Router()
     .put('/budget/:year/:month/:id', async (req, res, next) => {
         try {
             checkUser(req);
-            const { year, month, id } = req.params;
-            // handle updating a specific budget logic here
-            res.send(`Update budget for year: ${year}, month: ${month}, id: ${id}`);
+            const { year, month,id } = req.params;
+            const data = req.body;
+
+            if(!data){
+                throw new Error("Dati mancanti");
+            }
+            if(data._id!=id){
+                throw new Error("ID non corrispondente");
+            }
+
+
+            data.usercrea = req.user._id;
+            // data.date = new Date(year, month - 1, 1); // Creare una data per il primo giorno del mese specificato
+            const expense = await Expenses.findByIdAndUpdate(id, data, { new: true }).exec();
+            let letto = await Expenses.findById(expense._id).exec(); // perché me lo torna indietro già formattato 
+
+            res.send(letto);
         } catch (error) {
             next(error);
         }
@@ -133,9 +197,21 @@ export default express.Router()
     .delete('/budget/:year/:month/:id', async (req, res, next) => {
         try {
             checkUser(req);
-            const { year, month, id } = req.params;
-            // handle deleting a specific budget logic here
-            res.send(`Delete budget for year: ${year}, month: ${month}, id: ${id}`);
+            const { id } = req.params; // L'anno e il mese non sono necessari per l'eliminazione diretta
+            const user = req.user;
+    
+            // Cerca e elimina la spesa, assicurandoti che appartenga all'utente
+            const result = await Expenses.findOneAndDelete({
+                _id: id,
+                usercrea: user._id // Assicurati che la spesa appartenga all'utente che fa la richiesta
+            }).exec();
+
+            if (!result) {
+                throw new Error("Spesa non trovata.");
+            }
+    
+            // Se tutto va bene, invia una conferma dell'eliminazione
+            res.send(result);
         } catch (error) {
             next(error);
         }
@@ -145,8 +221,28 @@ export default express.Router()
     .get('/balance', async (req, res, next) => {
         try {
             checkUser(req);
-            // handle getting balance summary logic here
-            res.send('Get balance summary');
+            const user = req.user
+            let spese = await Expenses.find({"quote.user": user._id}).exec()
+            let bilancio = {
+                "dare":0,
+                "avere":0
+            }
+
+            if(spese){
+                for (let spesa of spese){
+                    for(let quota of spesa.quote){
+                        if(quota.user._id == user._id){
+                            if(quota.rimborso){
+                                bilancio.avere += quota.cost;
+                            }else{
+                                bilancio.dare += quota.cost;
+                            }
+                        }
+                    }
+                }
+            }
+
+            res.send(bilancio);
         } catch (error) {
             next(error);
         }
@@ -155,9 +251,12 @@ export default express.Router()
     .get('/balance/:id', async (req, res, next) => {
         try {
             checkUser(req);
-            const { id } = req.params;
+            const user = User.findById(req.params.id);
+            if(!user){
+                throw new Error("Utente non trovato");
+            }
             // handle getting balance by id logic here
-            res.send(`Get balance for id: ${id}`);
+            res.send(user);
         } catch (error) {
             next(error);
         }
@@ -204,6 +303,14 @@ export default express.Router()
             }) : await User.find();
             // handle user search logic here
             res.send(users);
+        } catch (error) {
+            next(error);
+        }
+    })
+    .get('/categories' , async (req, res, next) => {
+        try {
+            let categories = await Categories.find().select('_id name');
+            res.send(categories);
         } catch (error) {
             next(error);
         }

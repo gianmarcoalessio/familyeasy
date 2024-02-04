@@ -26,6 +26,5 @@
 
 <Input placeholder="Filtra per utente" inputclass="my-4 mx-2" />
 <Filtraggio />
-
-</div>
 <Table />
+</div>

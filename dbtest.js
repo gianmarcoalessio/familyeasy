@@ -1,6 +1,6 @@
 import User from './srcbk/db/users.js';
 import Categories from './srcbk/db/categories.js';
-import Expenses from './srcbk/db/expensess.js';
+import Expenses from './srcbk/db/expenses.js';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongodb';
 import fs from "fs";
@@ -17,7 +17,7 @@ function getcatid(c) {
 
 async function insertTestData() {
     try {
-        await mongoose.connect('mongodb://192.168.20.6:27017/familyeasy')
+        await mongoose.connect('mongodb://localhost/familyeasy')
         console.log("connesso...");
 
         var dbtest = JSON.parse(fs.readFileSync("dbtest.json"));
@@ -36,7 +36,6 @@ async function insertTestData() {
             var tm = await Categories.create(c);
             cats[tm.name.toLowerCase()] = tm._id;
         }
-        var ee = []
         for (var e of dbtest.expenses) {
             e.usercrea = getuserid(e.usercrea);
             e.category = getcatid(e.category);
@@ -55,7 +54,7 @@ async function insertTestData() {
 
 async function readData() {
     try {
-        await mongoose.connect('mongodb://192.168.20.6:27017/familyeasy')
+        await mongoose.connect('mongodb://localhost/familyeasy')
         console.log("connesso...");
 
         var e = await Expenses.find({
@@ -71,26 +70,27 @@ async function readData() {
 
 }
 
-async function speseSully() {
+async function budget(username, year, month,id) {
     try {
-        await mongoose.connect('mongodb://192.168.20.6:27017/familyeasy')
+        await mongoose.connect('mongodb://localhost/familyeasy')
         console.log("connesso...");
-        const user = await User.findOne({ username: 'sully' }).exec();
-        if (user) {
-            const e = await Expenses.find({ 'quote.user': user._id }).exec();
-            fs.writeFileSync('outsully.json', JSON.stringify(e, null, 2));
-
-        } else {
-            throw new Error('Utente non trovato');
+        const user = await User.findOne({ username: username }).exec();
+        if (!user) {
+            throw new Error("Utente non trovato");
         }
+
+        const expenses = await Expenses.find({
+            usercrea: user._id,
+        }).exec();
+
+
+
     } catch (e) {
         console.log("ERRORE", e.message);
     }
     process.exit(0);
-
-
 }
 
-//insertTestData()
-speseSully();
+// insertTestData()
+// speseSully();
 
