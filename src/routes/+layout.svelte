@@ -18,8 +18,6 @@
     });
 
     beforeNavigate(async ({ to, cancel }) => {
-        // prima di cambiare pagina
-        console.log('to', to);
         if (!$datilogin.token) {
             if (to?.route.id != '/registration' && to?.route.id != '/') {
                 await cancel(); // impedisco di andare in altre pagine

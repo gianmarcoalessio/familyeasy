@@ -4,8 +4,6 @@
     import {goto} from '$app/navigation';
     import {logout,datilogin} from '$lib/servizi.js';
     
-
-
     async function logoutare() {
         try {
             await logout();

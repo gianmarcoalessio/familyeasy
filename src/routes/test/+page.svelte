@@ -4,6 +4,7 @@
     import Categoria from '$prj/Categoria.svelte';
     import Table from '$prj/Table.svelte';
     import Spesamodifica from '$prj/Spesamodifica.svelte';
+    import { onMount } from 'svelte';
 
     let utenti = [];
     let categoria = {}
@@ -17,10 +18,6 @@
             utenti = err.message;
         }
     }
-
-
-
-
 
 </script>
 

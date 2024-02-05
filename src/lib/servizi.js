@@ -75,6 +75,11 @@ export async function dammiUtenti(q) {
     return response.data; // Assuming the user data is directly in the response data
 }
 
+export async function dammiUser(){
+    const response = await axios.get(`${baseurl}/api/budget/whoami`, getconfig());
+    return response.data;
+}
+
 export async function dammiCategorie(){
     const response = await axios.get(`${baseurl}/api/categories`, getconfig());
     return response.data;
@@ -85,8 +90,30 @@ export async function dammiSpese(){
     return response.data;
 }
 
-export async function daiSpesa(){
-    const response = await axios.post(`${baseurl}/api/budget/:year/:month`, getconfig());
+export async function daiSpesa(year, month, expenseData){
+    // Costruisci l'URL inserendo direttamente i valori di year e month
+    const url = `${baseurl}/api/budget/${year}/${month}`;
+
+    // Assicurati che expenseData contenga tutti i campi richiesti, inclusi `category` e `description`
+    const payload = {
+            date: expenseData.date,
+            description: expenseData.description,
+            category: {
+              _id: expenseData.category._id,
+              name: expenseData.category.name,
+            },
+            quote: []
+    };
+
+    payload.quote = expenseData.quote.map(quota => ({
+        user: quota.user._id, // Assumendo che tu voglia solo l'ID dell'utente
+        cost: quota.cost,
+        rimborso: quota.rimborso,
+    }));
+
+    // Invia la richiesta POST con il corpo della richiesta corretto
+    const response = await axios.post(url, payload, getconfig());
+
     return response.data;
 }
 

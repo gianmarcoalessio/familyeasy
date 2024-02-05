@@ -11,7 +11,6 @@ function checkUser(req) {
     if (!req.user) {
         throw new Error('User not authenticated');
     }
-    console.log(req.user);
 }
 
 export default express.Router()
@@ -72,6 +71,27 @@ export default express.Router()
             next(error);
         }
     })
+
+    // User Info
+    .get('/budget/whoami', async (req, res, next) => {
+            try {
+                checkUser(req);
+                const user = await User.findById(req.user._id);
+                if(user){
+                    const userinfo = {
+                        _id: user._id,
+                        username: user.username,
+                        firstname: user.firstname,
+                        lastname: user.lastname
+                    }
+                    res.send(userinfo);
+                }else{
+                    throw new Error("Informazioni utente non disponbili");
+                }
+            } catch (error) {
+                next(error);
+            }
+        })
 
     .get('/budget/:year', async (req, res, next) => {
         try {
@@ -269,17 +289,6 @@ export default express.Router()
             const { q: query } = req.query;
             // handle budget search logic here
             res.send(`Search budgets with query: ${query}`);
-        } catch (error) {
-            next(error);
-        }
-    })
-
-    // User Info
-    .get('/budget/whoami', async (req, res, next) => {
-        try {
-            checkUser(req);
-            // handle getting user info logic here
-            res.send('Get user info');
         } catch (error) {
             next(error);
         }

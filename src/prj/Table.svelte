@@ -34,7 +34,7 @@
     }
 </script>
 
-<table class="table w-full">
+<table class="table table-zebra w-full">
     <!-- head -->
     <thead>
         <tr>
@@ -54,7 +54,7 @@
                     {#if expense.quote.length > 1}
                         <div class="dropdown">
                             <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-                            <div tabindex="0" role="button" class="btn m-1">{formatParticipants(expense.quote)}</div>
+                            <div tabindex="0" role="button" class="btn btn-primary m-1">{formatParticipants(expense.quote)}</div>
                             <!-- Dropdown per visualizzare i partecipanti -->
                             <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
                             <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
@@ -80,4 +80,4 @@
 </table>
 
 
-<Spesamodifica open={ismodal} on:close={()=>{ismodal=false}} />
+<!-- <Spesamodifica open={ismodal} on:close={()=>{ismodal=false}} /> -->
