@@ -1,6 +1,6 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import {formatDate} from '$lib/utils.js';
+    import { formatDate } from '$lib/utils.js';
     export let topleftlabel = '',
         toprightlabel = '',
         bottomleftlabel = '',
@@ -21,8 +21,12 @@
         }
     }
     function doinputDate(e) {
-            value = new Date(e.target.value);
+        const inputDate = new Date(e.target.value);
+        if (!isNaN(inputDate.getTime())) {
+            // Verifica che inputDate sia una data valida
+            value = inputDate;
             dispatch('change', value);
+        }
     }
 </script>
 
@@ -35,14 +39,7 @@
     {/if}
 
     {#if type == 'date'}
-        <input
-            on:blur={doinputDate}
-            on:keypress={doinputDate}
-            on:input={doinputDate}
-            type="date"
-            {disabled}
-            class="input input-bordered {inputclass}"
-            value={formatDate(value)} />
+        <input on:blur={doinputDate} type="date" {disabled} class="input input-bordered {inputclass}" value={formatDate(value)} />
     {:else}
         <input
             on:blur={doinput}

@@ -7,6 +7,8 @@ import fs from "fs";
 
 var users = {};
 var cats = {};
+const DBCONN = 'mongodb://192.168.20.6:27017/familyeasy'
+
 
 function getuserid(u) {
     return users[u.toLowerCase()];
@@ -17,7 +19,7 @@ function getcatid(c) {
 
 async function insertTestData() {
     try {
-        await mongoose.connect('mongodb://localhost/familyeasy')
+        await mongoose.connect(DBCONN)
         console.log("connesso...");
 
         var dbtest = JSON.parse(fs.readFileSync("dbtest.json"));
@@ -54,7 +56,7 @@ async function insertTestData() {
 
 async function readData() {
     try {
-        await mongoose.connect('mongodb://localhost/familyeasy')
+        await mongoose.connect(DBCONN)
         console.log("connesso...");
 
         var e = await Expenses.find({
@@ -70,9 +72,9 @@ async function readData() {
 
 }
 
-async function budget(username, year, month,id) {
+async function budget(username, year, month, id) {
     try {
-        await mongoose.connect('mongodb://localhost/familyeasy')
+        await mongoose.connect(DBCONN)
         console.log("connesso...");
         const user = await User.findOne({ username: username }).exec();
         if (!user) {

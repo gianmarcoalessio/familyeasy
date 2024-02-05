@@ -15,10 +15,9 @@
 
     onMount(async () => {
         categorie = await dammiCategorie();
-        if(!categoria._id){
+        if (!categoria._id) {
             categoria = categorie[0];
         }
-
     });
 </script>
 
