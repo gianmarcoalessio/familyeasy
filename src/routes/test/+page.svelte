@@ -24,7 +24,7 @@
 <div class="flex flex-col space-y-4 mx-24 mt-4">
     <Navigator />
 
-    <div class="text-6xl font-bold text-third">test</div>
+    <div class="text-6xl font-bold ">test</div>
 </div>
 
 <div class="flex flex-col justify-center items-center w-1/2 space-y-4 mt-24 m-auto">

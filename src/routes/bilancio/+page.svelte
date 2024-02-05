@@ -9,7 +9,7 @@
 <div class="flex flex-col space-y-4 mx-24 mt-4">
     <Navigator />
 
-    <div class="text-6xl font-bold text-third">Bilancio</div>
+    <div class="text-6xl font-bold ">Bilancio</div>
 </div>
 
 <div class="grid grid-cols-1  mx-24 my-4">

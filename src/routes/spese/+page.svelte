@@ -9,7 +9,7 @@
 
 <div class="flex flex-col space-y-4 md:mx-24 mx-2 mt-4">
     <Navigator />
-    <div class="text-6xl font-bold text-third">Spese</div>
+    <div class="text-6xl font-bold">Spese</div>
 </div>
 
 <div class="grid md:gap-0 grid-cols-1 items-center md:mx-24 mx-4 my-4">

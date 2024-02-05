@@ -64,7 +64,7 @@
 </script>
 
 <dialog class="modal" {open}>
-  <div class="modal-box flex flex-col space-y-3 {isrimborso?"bg-neutral":""}">
+  <div class="modal-box flex flex-col space-y-3 {isrimborso?"bg-neutral-content":""}">
 
     <div class="text-4xl text-primary ">Modifica {isrimborso?"Rimborso":"Spesa"}</div>
 <div>Modificare i campi per la spesa selezionata</div>
@@ -113,7 +113,7 @@
                       class="toggle"
                       bind:checked={quota.rimborso} />
               </td>
-              <td>{#if i>0}<button on:click={()=>{expense.quote.splice(i,1); expense.quote = [...expense.quote]}} class="btn btn-third" >x</button>{/if}</td>
+              <td>{#if i>0}<button on:click={()=>{expense.quote.splice(i,1); expense.quote = [...expense.quote]}} class="btn" >x</button>{/if}</td>
           </tr>
       {/each}
   </tbody><tbody> </tbody>

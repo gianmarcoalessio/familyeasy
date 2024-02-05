@@ -49,7 +49,7 @@
     </thead>
     <tbody>
         {#each expenses as expense}
-            <tr class="hover:bg-neutral cursor-pointer" on:click={()=>{selriga=expense;ismodal=true}}>
+            <tr class="hover:bg-neutral-content cursor-pointer" on:click={()=>{selriga=expense;ismodal=true}}>
                 <td>{formatDate(expense.date)}</td>
                 <td>{formatCurrency(expense.totalcost)}</td>
                 <td>

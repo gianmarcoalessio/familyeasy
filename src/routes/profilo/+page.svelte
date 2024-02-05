@@ -17,11 +17,11 @@
 <div class="flex flex-col space-y-4 mx-24 mt-4">
     <Navigator />
 
-    <div class="text-6xl font-bold text-third">Profilo</div>
+    <div class="text-6xl font-bold ">Profilo</div>
 </div>
 
 <div class="flex flex-col items-center justify-center space-y-8 mt-4">
-    <div class="w-1/2 text-center p-4 bg-neutral rounded-xl">
+    <div class="w-1/2 text-center p-4 bg-neutral-content rounded-xl">
         Benvenuto su Family-easy, un progetto costruito per l'esame di programmazione WEB 2023-2024 dell'università di Trieste svolto da Gianmarco Alessio.
         Per il front-end si è utilizzato Svelte, per il back-end Node.js e per il database MongoDB.
         Con Svelte si è fatto uso del framework TailwindCSS per la parte di stile e di DaisyUI per la parte di componenti.
