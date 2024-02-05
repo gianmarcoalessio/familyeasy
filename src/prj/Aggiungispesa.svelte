@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount,tick } from 'svelte';
     import Input from '$daisi/Input.svelte';
     import Categoria from '$prj/Categoria.svelte';
     import Search from '$prj/Search.svelte';
@@ -10,6 +10,7 @@
     const dispatch = createEventDispatcher();
     let expense = {
         quote: [],
+        category:{},
     };
     // let today = new Date().toISOString().slice(0, 10);
     let datiSalvati = {};
@@ -27,15 +28,13 @@
                 },
             ],
             category: {},
-            date: '',
+            date: new Date().toISOString().slice(0, 10),
         };
 
         datiSalvati = JSON.parse(localStorage.getItem('token'));
         expense.quote[0].user.username = datiSalvati.username;
         expense.quote[0].user._id = datiSalvati._id;
     });
-
-    let categoria = {};
 
     // Funzione aggiuntiva per formattare numeri in euro
     function formatCurrency(value) {
@@ -74,23 +73,8 @@
         }
     }
 
-    // function cambiaCategoria(){
-    //     if (isrimborso && expense.quote.length > 1) {
-    //         for(let e of expense.quote){
-    //             e.rimborso = true;
-    //         }
-    //         expense.quote[0].rimborso = false;
-    //     }else{
-    //         for(let e of expense.quote){
-    //             e.rimborso = false;
-    //         }
-    //     }
-
-    //     expense.quote = [...expense.quote]; 
-
-    // }
-
     // Calcola il totale delle quote dove il rimborso è false
+    $: categoria = expense.category;
     $: totaleCosti = gettotaleCosti(expense,categoria);
     $: isrimborso = getisrimborso(categoria);
 </script>
@@ -107,8 +91,13 @@
     placeholder="Descrizione della spesa"></textarea>
 
 <div class="grid grid-cols-2 items-center justify-center gap-2 w-full">
-    <!-- <Categoria bind:categoria on:change={cambiaCategoria} /> -->
-    <Categoria bind:categoria  />
+    <Categoria
+    bind:categoria={expense.category}
+    on:change={async (e) => {
+        gettotaleCosti(); // errore di svelte
+        await tick(); //aspettare un giro prima di aggiornare la tabella l'ordine è importante
+        expense.quote = [...expense.quote];
+    }} />
     <Input placeholder="" type="date" bind:value={expense.date} />
 </div>
 

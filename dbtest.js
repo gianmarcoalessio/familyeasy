@@ -7,7 +7,7 @@ import fs from "fs";
 
 var users = {};
 var cats = {};
-const DBCONN = 'mongodb://192.168.20.6:27017/familyeasy'
+const DBCONN = 'mongodb://localhost/familyeasy'
 
 
 function getuserid(u) {

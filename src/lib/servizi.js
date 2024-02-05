@@ -85,9 +85,46 @@ export async function dammiCategorie() {
     return response.data;
 }
 
-export async function dammiSpese() {
-    const response = await axios.get(`${baseurl}/api/budget`, getconfig());
-    return response.data;
+export async function dammiSpese(filtri) {
+    try {
+        let url = `${baseurl}/api/budget`;
+        if(filtri.year) {
+            url += `/${filtri.year}`;
+            if(filtri.month) {
+                url += `/${filtri.month}`;
+            }
+        }else if(filtri.q){
+            url += `/search?q=${encodeURIComponent(filtri.q)}`;
+        }
+
+        const response = await axios.get(url, getconfig());
+        return response.data;
+        
+    } catch (error) {
+        addError(error.response.data?error.response.data : error.message);
+    }
+
+}
+
+export async function dammiQuote(filtri) {
+    try {
+        let url = `${baseurl}/api/balance`;
+        // if(filtri.year) {
+        //     url += `/${filtri.year}`;
+        //     if(filtri.month) {
+        //         url += `/${filtri.month}`;
+        //     }
+        // }else if(filtri.q){
+        //     url += `/search?q=${encodeURIComponent(filtri.q)}`;
+        // }
+
+        const response = await axios.get(url, getconfig());
+        return response.data;
+        
+    } catch (error) {
+        addError(error.response.data?error.response.data : error.message);
+    }
+
 }
 
 export async function daiSpesa(year, month,expense) {

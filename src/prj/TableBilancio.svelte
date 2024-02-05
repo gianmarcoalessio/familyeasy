@@ -31,15 +31,28 @@
     }
     export async function reload(){
         console.log('reload',filtri)
-        expenses = await dammiSpese(filtri);
+        expenses = await dammiQuote(filtri);
     }
 </script>
 
-{#if ismodal}
-    <Spesa open bind:expense={selriga} on:close={()=>{ismodal=false}} on:reload={()=>{ismodal=false, reload()}} />
-{/if}
 
-<Filtraggio on:filtra={async e=>{filtri = e.detail; await reload()}}  />
+
+<!-- {#if ismodal}
+    <Spesa open bind:expense={selriga} on:close={()=>{ismodal=false}} on:reload={()=>{ismodal=false, reload()}} />
+{/if} -->
+
+<div class="flex flex-row space-x-24 justify-center items-center my-8">
+    <div class="flex flex-col items-center space-y-4 justify-center ">
+        <div class="text-5xl">Dare</div>
+        <div class="text-5xl">0€</div>
+    </div>
+    <div class="flex flex-col items-center space-y-4 justify-center">
+        <div class="text-5xl">Avere</div>
+        <div class="text-5xl">0€</div>
+    </div>
+</div>
+
+<!-- <Filtraggio on:filtra={async e=>{filtri = e.detail; await reload()}}  /> -->
 
 <table class="table table-zebra w-full">
     <!-- head -->

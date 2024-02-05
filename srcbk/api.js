@@ -52,7 +52,7 @@ export default express.Router()
             let token = jwt.sign({ _id: tm._id }, process.env.JWT_SECRET, { expiresIn: 3600 * 48 }); //dopo un giorno devi rifare il login
 
 
-            res.send({ token, username: tm.username, firstname: tm.firstname, lastname: tm.lastname, _id:tm._id }); //tutte le informazioni dell'utente più il token per collegare tutti i vari servizi se sono autorizzati
+            res.send({ token, username: tm.username, firstname: tm.firstname, lastname: tm.lastname, _id: tm._id }); //tutte le informazioni dell'utente più il token per collegare tutti i vari servizi se sono autorizzati
 
         } catch (error) {
             setTimeout(() => {
@@ -66,7 +66,7 @@ export default express.Router()
         try {
             checkUser(req);
             const user = req.user
-            res.send(await Expenses.find({usercrea: user._id}).exec());
+            res.send(await Expenses.find({ usercrea: user._id }).exec());
         } catch (error) {
             next(error);
         }
@@ -74,35 +74,54 @@ export default express.Router()
 
     // User Info
     .get('/budget/whoami', async (req, res, next) => {
-            try {
-                checkUser(req);
-                const user = await User.findById(req.user._id);
-                if(user){
-                    const userinfo = {
-                        _id: user._id,
-                        username: user.username,
-                        firstname: user.firstname,
-                        lastname: user.lastname
-                    }
-                    res.send(userinfo);
-                }else{
-                    throw new Error("Informazioni utente non disponbili");
+        try {
+            checkUser(req);
+            const user = await User.findById(req.user._id);
+            if (user) {
+                const userinfo = {
+                    _id: user._id,
+                    username: user.username,
+                    firstname: user.firstname,
+                    lastname: user.lastname
                 }
-            } catch (error) {
-                next(error);
+                res.send(userinfo);
+            } else {
+                throw new Error("Informazioni utente non disponbili");
             }
-        })
+        } catch (error) {
+            next(error);
+        }
+    })
+
+    // Budget Search
+    .get('/budget/search', async (req, res, next) => {
+        try {
+            checkUser(req);
+            const { q: query } = req.query; // La query di ricerca inserita dall'utente
+            const user = req.user;
+
+            // Eseguire la query filtrando per usercrea e ricerca parziale su descrizione
+            const budgets = await Expenses.find({
+                usercrea: user._id,
+                description: new RegExp(query, 'i') // La 'i' dopo la regex indica che la ricerca non è case-sensitive
+            }).exec();
+            
+            res.send(budgets);
+        } catch (error) {
+            next(error);
+        }
+    })
 
     .get('/budget/:year', async (req, res, next) => {
         try {
             checkUser(req);
             const { year } = req.params;
             const user = req.user;
-    
+
             // Creare le date di inizio e fine per l'anno specificato
             const startDate = new Date(year, 0, 1); // 1 gennaio dell'anno
             const endDate = new Date(year, 11, 31, 23, 59, 59); // 31 dicembre dell'anno
-    
+
             // Eseguire la query filtrando per usercrea e intervallo di date
             const budgets = await Expenses.find({
                 usercrea: user._id,
@@ -111,7 +130,7 @@ export default express.Router()
                     $lte: endDate
                 }
             }).exec();
-    
+
             res.send(budgets);
         } catch (error) {
             next(error);
@@ -123,15 +142,15 @@ export default express.Router()
             checkUser(req);
             const { year, month } = req.params;
             const user = req.user;
-    
+
             // Convertire l'anno e il mese dai parametri in numeri
             const yearNum = parseInt(year, 10);
             const monthNum = parseInt(month, 10) - 1; // I mesi in JavaScript partono da 0
-    
+
             // Calcolare la data di inizio e fine del mese specificato
             const startDate = new Date(yearNum, monthNum, 1);
             const endDate = new Date(yearNum, monthNum + 1, 0, 23, 59, 59); // L'ultimo giorno del mese
-    
+
             // Eseguire la query filtrando per usercrea e intervallo di date
             const budgets = await Expenses.find({
                 usercrea: user._id,
@@ -140,23 +159,23 @@ export default express.Router()
                     $lte: endDate
                 }
             }).exec();
-    
+
             res.send(budgets);
         } catch (error) {
             next(error);
         }
     })
-    
+
 
     .get('/budget/:year/:month/:id', async (req, res, next) => {
         try {
             checkUser(req);
             const { year, month, id } = req.params;
             const user = req.user;
-    
+
             // Trova la spesa specifica per ID
             const expense = await Expenses.findById(id).exec();
-    
+
             // Verifica se la spesa appartiene all'utente, all'anno e al mese specificati
             if (!expense) {
                 return res.status(404).send({ message: "Spesa non trovata." });
@@ -166,7 +185,7 @@ export default express.Router()
             next(error);
         }
     })
-    
+
 
     .post('/budget/:year/:month', async (req, res, next) => {
         try {
@@ -174,7 +193,7 @@ export default express.Router()
             const { year, month } = req.params;
             const data = req.body;
 
-            if(!data){
+            if (!data) {
                 throw new Error("Dati mancanti");
             }
 
@@ -192,13 +211,13 @@ export default express.Router()
     .put('/budget/:year/:month/:id', async (req, res, next) => {
         try {
             checkUser(req);
-            const { year, month,id } = req.params;
+            const { year, month, id } = req.params;
             const data = req.body;
 
-            if(!data){
+            if (!data) {
                 throw new Error("Dati mancanti");
             }
-            if(data._id!=id){
+            if (data._id != id) {
                 throw new Error("ID non corrispondente");
             }
 
@@ -219,7 +238,7 @@ export default express.Router()
             checkUser(req);
             const { id } = req.params; // L'anno e il mese non sono necessari per l'eliminazione diretta
             const user = req.user;
-    
+
             // Cerca e elimina la spesa, assicurandoti che appartenga all'utente
             const result = await Expenses.findOneAndDelete({
                 _id: id,
@@ -229,7 +248,7 @@ export default express.Router()
             if (!result) {
                 throw new Error("Spesa non trovata.");
             }
-    
+
             // Se tutto va bene, invia una conferma dell'eliminazione
             res.send(result);
         } catch (error) {
@@ -242,19 +261,19 @@ export default express.Router()
         try {
             checkUser(req);
             const user = req.user
-            let spese = await Expenses.find({"quote.user": user._id}).exec()
+            let spese = await Expenses.find({ "quote.user": user._id }).exec()
             let bilancio = {
-                "dare":0,
-                "avere":0
+                "dare": 0,
+                "avere": 0
             }
 
-            if(spese){
-                for (let spesa of spese){
-                    for(let quota of spesa.quote){
-                        if(quota.user._id == user._id){
-                            if(quota.rimborso){
+            if (spese) {
+                for (let spesa of spese) {
+                    for (let quota of spesa.quote) {
+                        if (quota.user._id == user._id) {
+                            if (quota.rimborso) {
                                 bilancio.avere += quota.cost;
-                            }else{
+                            } else {
                                 bilancio.dare += quota.cost;
                             }
                         }
@@ -272,23 +291,11 @@ export default express.Router()
         try {
             checkUser(req);
             const user = User.findById(req.params.id);
-            if(!user){
+            if (!user) {
                 throw new Error("Utente non trovato");
             }
             // handle getting balance by id logic here
             res.send(user);
-        } catch (error) {
-            next(error);
-        }
-    })
-
-    // Budget Search
-    .get('/budget/search', async (req, res, next) => {
-        try {
-            checkUser(req);
-            const { q: query } = req.query;
-            // handle budget search logic here
-            res.send(`Search budgets with query: ${query}`);
         } catch (error) {
             next(error);
         }
@@ -316,7 +323,7 @@ export default express.Router()
             next(error);
         }
     })
-    .get('/categories' , async (req, res, next) => {
+    .get('/categories', async (req, res, next) => {
         try {
             let categories = await Categories.find().select('_id name');
             res.send(categories);

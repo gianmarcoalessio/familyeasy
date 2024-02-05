@@ -6,7 +6,7 @@ import cors from 'cors'
 import jwt from 'jsonwebtoken'
 import "dotenv/config";
 import { handler } from './build/handler.js'
-const DBCONN = 'mongodb://192.168.20.6:27017/familyeasy'
+const DBCONN = 'mongodb://localhost/familyeasy'
 const app = express()
 app.use(cors()); //per chiamare localhost8000 da localhost3000, controllo che fanno i browser per la sicurezza solo per il debug perché quando siamo in RUN cors non serve più
 app.use(express.json());

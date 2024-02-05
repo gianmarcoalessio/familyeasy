@@ -61,13 +61,8 @@
     $: categoria = expense.category;
 </script>
 
-<dialog class="modal" {open}>
-  <div class="modal-box flex flex-col space-y-3 {isrimborso?"bg-neutral-content":""}">
-
-    <div class="text-4xl text-primary ">Modifica {isrimborso?"Rimborso":"Spesa"}</div>
-<div>Modificare i campi per la spesa selezionata</div>
 <dialog class="modal modal-lg" {open}>
-    <div class="modal-box flex flex-col space-y-3 {isrimborso ? 'bg-neutral' : ''}">
+    <div class="modal-box flex flex-col space-y-3 {isrimborso ? 'bg-neutral-content' : ''}">
         <div class="text-4xl text-primary">Modifica {isrimborso ? 'Rimborso' : 'Spesa'}</div>
         <div>Modificare i campi per la spesa selezionata</div>
 
@@ -80,10 +75,9 @@
             <Categoria
                 bind:categoria={expense.category}
                 on:change={async (e) => {
-                    gettotaleCosti();
-                    await tick();
+                    gettotaleCosti(); // errore di svelte
+                    await tick(); //aspettare un giro prima di aggiornare la tabella l'ordine è importante
                     expense.quote = [...expense.quote];
-                    //expense.quote.forEach((e) => (e.rimborso = isrimborso ? true : false));
                 }} />
 
             <Input type="date" bind:value={expense.date} />
