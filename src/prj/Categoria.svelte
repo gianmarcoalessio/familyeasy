@@ -25,6 +25,6 @@
 <select class="select select-bordered" value={categoria._id} on:change={cambiaCategoria}>
     <option disabled value="">Seleziona categoria</option>
     {#each categorie as option}
-        <option value={option._id}>{option.name}</option>
+        <option selected={option._id == categoria._id} value={option._id}>{option.name}</option>
     {/each}
 </select>
