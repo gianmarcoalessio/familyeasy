@@ -5,8 +5,8 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
 import "dotenv/config";
-import {handler} from './build/handler.js'
-
+import { handler } from './build/handler.js'
+const DBCONN = 'mongodb://192.168.20.6:27017/familyeasy'
 const app = express()
 app.use(cors()); //per chiamare localhost8000 da localhost3000, controllo che fanno i browser per la sicurezza solo per il debug perché quando siamo in RUN cors non serve più
 app.use(express.json());
@@ -50,6 +50,6 @@ app.use(handler);
 
 app.listen(3000, async () => {
   console.log('Server running on port 3000')
-  await mongoose.connect('mongodb://localhost/familyeasy')
+  await mongoose.connect(DBCONN)
   console.log("connected");
 })

@@ -15,16 +15,15 @@
 
     onMount(async () => {
         categorie = await dammiCategorie();
-        if(!categoria._id){
+        if (!categoria._id) {
             categoria = categorie[0];
         }
-
     });
 </script>
 
 <select class="select select-bordered" value={categoria._id} on:change={cambiaCategoria}>
     <option disabled value="">Seleziona categoria</option>
     {#each categorie as option}
-        <option value={option._id}>{option.name}</option>
+        <option selected={option._id == categoria._id} value={option._id}>{option.name}</option>
     {/each}
 </select>
