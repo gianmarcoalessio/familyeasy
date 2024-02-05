@@ -1,5 +1,6 @@
 <script>
     import { createEventDispatcher } from 'svelte';
+    import {formatDate} from '$lib/utils.js';
     export let topleftlabel = '',
         toprightlabel = '',
         bottomleftlabel = '',
@@ -19,6 +20,10 @@
             dispatch('change', value);
         }
     }
+    function doinputDate(e) {
+            value = new Date(e.target.value);
+            dispatch('change', value);
+    }
 </script>
 
 <label class="form-control w-full">
@@ -29,16 +34,27 @@
         </div>
     {/if}
 
-    <input
-        on:blur={doinput}
-        on:keypress={doinput}
-        on:input={doinput}
-        {type}
-        {placeholder}
-        {disabled}
-        class="input input-bordered {inputclass}"
-        {checked}
-        {value} />
+    {#if type == 'date'}
+        <input
+            on:blur={doinputDate}
+            on:keypress={doinputDate}
+            on:input={doinputDate}
+            type="date"
+            {disabled}
+            class="input input-bordered {inputclass}"
+            value={formatDate(value)} />
+    {:else}
+        <input
+            on:blur={doinput}
+            on:keypress={doinput}
+            on:input={doinput}
+            {type}
+            {placeholder}
+            {disabled}
+            class="input input-bordered {inputclass}"
+            {checked}
+            {value} />
+    {/if}
 
     {#if bottomleftlabel || bottomrightlabel}
         <div class="label">

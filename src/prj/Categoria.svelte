@@ -1,9 +1,13 @@
 <script>
     import { onMount } from 'svelte';
     import { dammiCategorie } from '$lib/servizi.js';
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
 
     function cambiaCategoria(event) {
         categoria = categorie.find((c) => c._id === event.target.value);
+        dispatch('change', categoria);
     }
 
     let categorie = [];

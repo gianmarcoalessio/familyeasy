@@ -1,81 +1,135 @@
 
 <script>
-    import { onMount } from 'svelte';
-    import Input from '$daisi/Input.svelte'; // Assicurati di avere questo componente o adattalo al tuo caso
-    import Partecipanti from './Partecipanti.svelte'; // Assicurati di avere questo componente o adattalo al tuo caso  
-  
-    export let open = true;
-    let descrizione = '';
-    let categoria = '';
-    let data = '';
-    let importoTotale = '';
-    let rimborso = false;
-    let participants = []; // Assumeremo che questa sia una lista di partecipanti disponibili
-    let selectedParticipants = []; // I partecipanti selezionati per la spesa
-    import { createEventDispatcher } from 'svelte';
-  // Resto dell'import e dello script
+  import { onMount } from 'svelte';
+  import Input from '$daisi/Input.svelte';
+  import Categoria from '$prj/Categoria.svelte';
+  import Search from '$prj/Search.svelte';
+  import { createEventDispatcher } from 'svelte';
+  import { updateSpesa, deleteSpesa } from '$lib/servizi.js';
 
+  export let open = false;
   const dispatch = createEventDispatcher();
-  
-    // Dati fittizi per selectOptions, sostituire con dati reali secondo necessità
-    let selectOptions = [
-      { value: 'cibo', label: 'Cibo' },
-      { value: 'trasporto', label: 'Trasporto' },
-      // Aggiungi altre categorie qui...
-    ];
-  
-    onMount(() => {
-      // Inizializzazione o caricamento di dati, se necessario
-    });
-  
-    function aggiungiSpesa() {
-      // Logica per aggiungere o modificare la spesa
-      console.log('Aggiungi/Modifica Spesa', { descrizione, categoria, data, importoTotale, rimborso, selectedParticipants });
-      // Implementa la logica per salvare la spesa nel backend o nello stato globale dell'app
-    }
-  
-    function toggleParticipant(participant, checked) {
-      if (checked) {
-        selectedParticipants = [...selectedParticipants, participant];
+  export let expense = {
+      quote: [],
+      category: {}
+  };
+
+
+  // Funzione aggiuntiva per formattare numeri in euro
+  function formatCurrency(value) {
+      return Number(value).toLocaleString('it-IT', { style: 'currency', currency: 'EUR' });
+  }
+  function aggiungiQuota(e) {
+      expense.quote = [...expense.quote, { user: e.detail, cost: 0, rimborso: false }];
+  }
+  async function modificaSpesa() {
+      await updateSpesa(expense);
+      dispatch('reload');
+  }
+
+  async function eliminaSpesa() {
+      await deleteSpesa(expense);
+      dispatch('reload');
+  }
+
+  function getisrimborso() {
+      return categoria.name === 'Rimborso' ? true : false;
+  }
+
+  function gettotaleCosti() {
+      let quote = expense.quote;
+
+      if (isrimborso && quote.length > 1) {
+          let totale = 0;
+          for (let i = 1; i < quote.length; i++) {
+              totale += quote[i].cost;
+              quote[i].rimborso = true;
+          }
+          quote[0].cost = totale;
+
+          quote[0].rimborso = false;
+          return 0;
       } else {
-        selectedParticipants = selectedParticipants.filter(p => p.id !== participant.id);
+          return expense.quote.reduce((total, quota) => {
+              quota.rimborso = false;
+              return total + quota.cost;
+          }, 0);
       }
-    }
-  </script>
+  }
+
+  // Calcola il totale delle quote dove il rimborso è false
+  $: totaleCosti = gettotaleCosti(expense,categoria);
+  $: isrimborso = getisrimborso(categoria);
+  $: categoria = expense.category;
+</script>
+
+<dialog class="modal" {open}>
+  <div class="modal-box flex flex-col space-y-3 {isrimborso?"bg-neutral":""}">
+
+    <div class="text-4xl text-primary ">Modifica {isrimborso?"Rimborso":"Spesa"}</div>
+<div>Modificare i campi per la spesa selezionata</div>
+
+<textarea
+  class="textarea textarea-bordered textarea-md w-full"
+  bind:value={expense.description}
+  placeholder="Descrizione della spesa"></textarea>
+
+<div class="grid grid-cols-2 items-center justify-center gap-2 w-full">
+  <Categoria bind:categoria={expense.category} on:change={gettotaleCosti} />
   
-  <dialog class="modal" open={open}>
-    <div class="modal-box">
-      <div class="flex flex-col justify-center items-center space-y-4 m-auto">
-        <div class="text-4xl text-third">Aggiungi la spesa</div>
-        <div>Completare i campi per aggiungere una spesa</div>
-        <div class="form-control">
-          <label class="label cursor-pointer">
-            <span class="label-text mr-4">Rimborso</span>
-            <input type="checkbox" class="toggle" bind:checked={rimborso} />
-          </label>
-        </div>
-        
-        <textarea class="textarea textarea-bordered textarea-md w-full" bind:value={descrizione} placeholder="Descrizione"></textarea>
-        
-        <div class="grid grid-cols-2 items-center justify-center gap-2 w-full">
-          <select class="select select-bordered" bind:value={categoria}>
-            <option disabled value="">Seleziona categoria</option>
-            {#each selectOptions as option}
-              <option value={option.value}>{option.label}</option>
-            {/each}
-          </select>
-          <Input bind:value={data} placeholder="Data" type="date" />
-        </div>
-        
-        <Input bind:value={importoTotale} placeholder="Importo Totale" inputclass="input-primary" />
-        <div>Le spese sono condivise equamente per default</div>
-        
-        <Partecipanti />
-        
-        <button class="btn btn-primary w-full" on:click={aggiungiSpesa}>Aggiungi</button>
-      </div>
-      <div class="modal-action">
-        <button class="btn" on:click={()=>{dispatch('close')}}>Close</button>
-      </div>
-    </div>
-  </dialog>
+  <Input type="date" bind:value={expense.date} />
+</div>
+
+<Search on:add={aggiungiQuota} topleftlabel={isrimborso?"Aggiungere gli utenti da rimborsare" :"Cerca un utente a cui associare una quota"} />
+<Input topleftlabel="Totale spesa" disabled value={formatCurrency(totaleCosti)} />
+
+
+
+<table class="table p-2 shadow bg-base-100 w-full text-center">
+  <thead>
+      <tr>
+          <th>Username</th>
+          <th>Quota</th>
+          <th>Spesa/Rimborso</th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+      {#each expense.quote as quota,i}
+          <tr>
+              <td class="flex-1">@{quota.user.username}</td>
+              <td>
+                  <input
+                      type="number"
+                      class="w-40 text-lg p-2 text-center rounded-lg {quota.rimborso ? 'text-success' : 'text-error'}"
+                      placeholder={formatCurrency(quota.cost)}
+                      disabled={i==0 && categoria.name === 'Rimborso'}
+                      bind:value={quota.cost} />
+              </td>
+              <td>
+                  <input
+                      type="checkbox"
+                      disabled
+                      class="toggle"
+                      bind:checked={quota.rimborso} />
+              </td>
+              <td>{#if i>0}<button on:click={()=>{expense.quote.splice(i,1); expense.quote = [...expense.quote]}} class="btn btn-third" >x</button>{/if}</td>
+          </tr>
+      {/each}
+  </tbody><tbody> </tbody>
+</table>
+
+<div class="flex flex-row space-x-2 mt-4">
+<button class="btn btn-error" on:click={eliminaSpesa}>Elimina</button>
+<button class="btn btn-success flex-1" on:click={modificaSpesa}>Modifica</button>
+</div>
+<div class="modal-action">
+  <button
+    class="btn"
+    on:click={() => {
+      dispatch('close');
+    }}>Close</button>
+</div>
+
+</div>
+</dialog>

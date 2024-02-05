@@ -52,7 +52,7 @@ export default express.Router()
             let token = jwt.sign({ _id: tm._id }, process.env.JWT_SECRET, { expiresIn: 3600 * 48 }); //dopo un giorno devi rifare il login
 
 
-            res.send({ token, username: tm.username, firstname: tm.firstname, lastname: tm.lastname }); //tutte le informazioni dell'utente più il token per collegare tutti i vari servizi se sono autorizzati
+            res.send({ token, username: tm.username, firstname: tm.firstname, lastname: tm.lastname, _id:tm._id }); //tutte le informazioni dell'utente più il token per collegare tutti i vari servizi se sono autorizzati
 
         } catch (error) {
             setTimeout(() => {

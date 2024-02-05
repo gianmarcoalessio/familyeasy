@@ -23,12 +23,12 @@
 <div class="relative w-full">
 <Input
     topleftlabel="{topleftlabel}"
-    placeholder="Search by username, firstname, and lastname"
+    placeholder="Cerca per nome, cognome e username"
     inputclass=" input-primary"
     bind:value={cerca}
     on:change={cercaUtenti} />
 {#if utenti.length > 0 && cerca !== ''}
-<div class="flex flex-col space-y-1 absolute top-16 left-0 z-10 bg-third w-full ">
+<div class="flex flex-col space-y-1 absolute top-26 left-0 z-10 bg-neutral px-2 py-2 rounded-xl w-full ">
     {#each utenti as utente}
         <button on:click={()=> {selezionautente(utente)}} class="btn  flex flex-row space-x-2 items-center">
             <div class="flex-1">@{utente.username}</div>

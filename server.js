@@ -5,6 +5,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
 import "dotenv/config";
+import {handler} from './build/handler.js'
 
 const app = express()
 app.use(cors()); //per chiamare localhost8000 da localhost3000, controllo che fanno i browser per la sicurezza solo per il debug perché quando siamo in RUN cors non serve più
@@ -44,7 +45,8 @@ app.use((err, req, res, next) => {
     next();
   }
 })
-app.use('/', express.static("./public"));
+// app.use('/', express.static("./public"));
+app.use(handler);
 
 app.listen(3000, async () => {
   console.log('Server running on port 3000')

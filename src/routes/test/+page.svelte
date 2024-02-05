@@ -3,7 +3,7 @@
     import Navigator from '$prj/Navigator.svelte';
     import Categoria from '$prj/Categoria.svelte';
     import Table from '$prj/Table.svelte';
-    import Spesamodifica from '$prj/Spesamodifica.svelte';
+    import Aggiungispesa from '$prj/Aggiungispesa.svelte';
     import { onMount } from 'svelte';
 
     let utenti = [];
@@ -34,7 +34,7 @@
 
    <Categoria bind:categoria />
 
-   <Spesamodifica />
+   <Aggiungispesa />
 
 
 </div>

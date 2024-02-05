@@ -91,6 +91,6 @@ async function budget(username, year, month,id) {
     process.exit(0);
 }
 
-// insertTestData()
+insertTestData()
 // speseSully();
 

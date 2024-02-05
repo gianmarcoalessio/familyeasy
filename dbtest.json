@@ -45,6 +45,9 @@
     },
     {
       "name": "Salute"
+    },
+    {
+      "name":"Rimborso"
     }
   ],
   "expenses": [

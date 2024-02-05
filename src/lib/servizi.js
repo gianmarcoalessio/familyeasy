@@ -12,15 +12,15 @@ let bearer = null; // bearer è una variabi3le che mi serve per memorizzare il t
 // ----------------- gestione dei messaggi ----------------- //
 
 export function addWarning(messaggio) {
-    messaggi.update(messages => [...messages, {messaggio, ruolo: 'warning'}]);
+    messaggi.update(messages => [...messages, { messaggio, ruolo: 'warning' }]);
 }
 
 export function addError(messaggio) {
-    messaggi.update(messages => [...messages, {messaggio, ruolo: 'error'}]);
+    messaggi.update(messages => [...messages, { messaggio, ruolo: 'error' }]);
 }
 
 export function addSuccess(messaggio) {
-    messaggi.update(messages => [...messages,{messaggio, ruolo: 'success'}]);
+    messaggi.update(messages => [...messages, { messaggio, ruolo: 'success' }]);
 }
 
 export function clearMessages() {
@@ -31,14 +31,14 @@ export function clearMessages() {
 // ----------------- gestione del token di autenticazione ----------------- //
 
 function getconfig() { // funzione per gestire il bearer da parte di axios 
-        if (bearer) {
-            return {
-                headers: {
-                    Authorization: `Bearer ${bearer}`
-                }
+    if (bearer) {
+        return {
+            headers: {
+                Authorization: `Bearer ${bearer}`
             }
         }
-        return {};
+    }
+    return {};
 }
 
 // ----------------- servizi per la gestione dell'autenticazione ----------------- //
@@ -53,7 +53,7 @@ export async function login(user) {
     let data = response.data;
     bearer = data.token; // memorizzo il token di autenticazione
     datilogin.set(response.data); // memorizzo i dati dell'utente loggato
-    localStorage.setItem('token', JSON.stringify(response.data,null,2))
+    localStorage.setItem('token', JSON.stringify(response.data, null, 2))
     return data;
 }
 
@@ -63,7 +63,7 @@ export async function logout() {
     datilogin.set({}); // resetto i dati dell'utente loggato 
 }
 
-export function setbearer(token){
+export function setbearer(token) {
     bearer = token;
 }
 
@@ -75,46 +75,55 @@ export async function dammiUtenti(q) {
     return response.data; // Assuming the user data is directly in the response data
 }
 
-export async function dammiUser(){
+export async function dammiUser() {
     const response = await axios.get(`${baseurl}/api/budget/whoami`, getconfig());
     return response.data;
 }
 
-export async function dammiCategorie(){
+export async function dammiCategorie() {
     const response = await axios.get(`${baseurl}/api/categories`, getconfig());
     return response.data;
 }
 
-export async function dammiSpese(){
+export async function dammiSpese() {
     const response = await axios.get(`${baseurl}/api/budget`, getconfig());
     return response.data;
 }
 
-export async function daiSpesa(year, month, expenseData){
-    // Costruisci l'URL inserendo direttamente i valori di year e month
-    const url = `${baseurl}/api/budget/${year}/${month}`;
+export async function daiSpesa(year, month,expense) {
+    try {
+        // Costruisci l'URL inserendo direttamente i valori di year e month
+        const url = `${baseurl}/api/budget/${year}/${month}`;
+        const response = await axios.post(url,expense, getconfig());
+        return response.data;
 
-    // Assicurati che expenseData contenga tutti i campi richiesti, inclusi `category` e `description`
-    const payload = {
-            date: expenseData.date,
-            description: expenseData.description,
-            category: {
-              _id: expenseData.category._id,
-              name: expenseData.category.name,
-            },
-            quote: []
-    };
+    } catch (error) {
+        addError(error.response.data?error.response.data : error.message);
+    }
+}
 
-    payload.quote = expenseData.quote.map(quota => ({
-        user: quota.user._id, // Assumendo che tu voglia solo l'ID dell'utente
-        cost: quota.cost,
-        rimborso: quota.rimborso,
-    }));
+export async function deleteSpesa(expense) {
+    try {
+        const url = `${baseurl}/api/budget/0/0/${expense._id}`;
+        console.log(url);
+        const response = await axios.delete(url, getconfig());
+        return response.data;
+        
+    } catch (error) {
+        addError(error.response.data?error.response.data : error.message);
+        
+    }
 
-    // Invia la richiesta POST con il corpo della richiesta corretto
-    const response = await axios.post(url, payload, getconfig());
+}
 
-    return response.data;
+export async function updateSpesa(expense) {
+    try {
+        const url = `${baseurl}/api/budget/0/0/${expense._id}`;
+        const response = await axios.put(url,expense, getconfig());
+        return response.data;
+    } catch (error) {
+        addError(error.response.data?error.response.data : error.message);
+    }
 }
 
 
