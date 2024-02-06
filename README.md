@@ -2,12 +2,12 @@
 
 In rifenrimento al documento di esame "[Progetto di Programmazione Web](https://docs.google.com/document/d/1KbCtTKKtEkzpXYBExV0OU1v7W09rpzOCk7XPn9sSem0/edit#heading=h.ccj6mdt2qp5)" (A.A. 2023/2024), si presenta l'applicazione Familyeasy, una piattaforma per la gestione delle spese familiari.
 
-## Database di Test per Provare la Piattaforma
+## Provare la Piattaforma
 
-Per caricare i dati sul database, utilizzare il seguente script:
+Scaricare docker ed eseguire il comando:
 
 ```bash
-node dbtest
+docker-compose up --build
 ```
 
 Successivamente, è possibile accedere con l'utente:
