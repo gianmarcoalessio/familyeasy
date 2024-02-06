@@ -46,6 +46,7 @@
     async function aggiungiSpesa() {
         expense.category = categoria;
         await daiSpesa(0, 0, expense);
+        dispatch('reload')
     }
 
     function getisrimborso() {
@@ -83,7 +84,7 @@
     <div class="modal-box flex flex-col space-y-3 {isrimborso?"bg-neutral-content":""}">
 
 <div class="text-4xl text-primary ">Aggiungi {isrimborso?"Rimborso":"Spesa"}</div>
-<div>Completare i campi per aggiungere una spesa</div>
+<div>Completare i campi per aggiungere {isrimborso? "un rimborso":"una spesa"}</div>
 
 <textarea
     class="textarea textarea-bordered textarea-md w-full"
@@ -102,7 +103,7 @@
 </div>
 
 <Search on:add={aggiungiQuota} topleftlabel={isrimborso?"Aggiungere gli utenti da rimborsare" :"Cerca un utente a cui associare una quota"} />
-<Input topleftlabel="Totale spesa" disabled value={formatCurrency(totaleCosti)} />
+<Input topleftlabel="Totale spesa (somma delle quote)" disabled value={formatCurrency(totaleCosti)} />
 
 
 
@@ -152,15 +153,3 @@
 
 </div>
 </dialog>
-
-<!-- Come funziona il rimborso: -->
-<!-- Praticamente se metto le quote con rimborso true le mie quote sono positive e le quote degli altri sono negative in
-modo tale che la sommando tutte le quote si ottiene l'effettiva spesa, quindi se io rimborso il valore è negativo
-e se gli altri metto rimborso=false allora la quotà è positiva  (in rosso abbiamo una spesa e in verde un guadagno)-->
-
-<!-- il valore mio è sempre positivo, sia se faccio un rimborso sia se non lo faccio, però gli altri posso cambiare, se non è un rimborso allora mi aiutano con la spesa altrimenti se è un rimborso mi prendo soldi dalla mia spesa e gli vengo accreditati al loro conto!!!!!!!
-
-Per questo il valore di rimborso per me sarà sempre false perché un rimborso a se stessi non ha senso
-
-Poi per calcolare il balance finale si sommano le quote ricevute come rimborso (rimborso=true) in AVERE e si sommano le quote come partecipante (rimborso=false) nel DARE -->
-<!-- il rimborso è rispetto all'user e non alla spesa -->

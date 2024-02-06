@@ -2,7 +2,6 @@ import User from './srcbk/db/users.js';
 import Categories from './srcbk/db/categories.js';
 import Expenses from './srcbk/db/expenses.js';
 import mongoose from 'mongoose';
-import { ObjectId } from 'mongodb';
 import fs from "fs";
 
 var users = {};

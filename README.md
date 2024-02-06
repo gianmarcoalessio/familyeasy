@@ -1,38 +1,35 @@
-# create-svelte
+# Familyeasy app
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+## Database di test per provare la piattaforma
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
+Per caricare i dati sul database usare il seguente script:
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+node dbtest
 ```
 
-## Developing
+Dopo di che collegarsi con l'utente:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- Username: jaker
+- Password: Pass1234
+
+Per la ricerca di ulteriori utenti, si elencono gli username per facilitare il test dell'applicazione:
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+mikew, sully, randall, boo
 ```
 
-## Building
+## Specifiche
 
-To create a production version of your app:
+- FrontEnd: Sveltejs, tailwindcss, daisyUI
+- BackEnd: Node.js, express, axios, jwt, mongodb, mongoose 
 
-```bash
-npm run build
-```
+## Note 
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- Il costo totale della spesa è calcolato dalle quote inserite (Aggiungispesa.svelte).
+- Dentro la cartella prj (e.g. Table.svelte) sono elencate le componenti utilizzate per l'applicazione.
+- Il rimborso implica che il costo totale sia zero e la quota del user loggato e calcolata in base alle quote(rimborso) degli utenti inseriti. La quota dell'user loggato in tal caso è considerata una spesa (dare) rivolta all'utente inserito (Search.svelte nella componente Spesa.svelte)
+- I servizi si trovano dentro `src/lib/servizi.js` mentre le API rest dentro `srcbk/api.js`
+- È presente una route verso una pagina di test utilizzata per i test.
+- Gli schema del database sono definite dentro: `srcbk/db/categories.js`, `srcbk/db/expenses.js`,`srcbk/db/users.js` 
+  

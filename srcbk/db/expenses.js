@@ -71,5 +71,4 @@ ExpensesSchema.pre(['find', 'findOne','findById'], function (next) {
     next();
 });
 
-
 export default mongoose.model("Expenses", ExpensesSchema)

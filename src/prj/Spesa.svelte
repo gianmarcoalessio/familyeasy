@@ -7,6 +7,7 @@
     import { updateSpesa, deleteSpesa } from '$lib/servizi.js';
 
     export let open = false;
+    export let nosave = false;
     const dispatch = createEventDispatcher();
     export let expense = {
         quote: [],
@@ -63,8 +64,8 @@
 
 <dialog class="modal modal-lg" {open}>
     <div class="modal-box flex flex-col space-y-3 {isrimborso ? 'bg-neutral-content' : ''}">
-        <div class="text-4xl text-primary">Modifica {isrimborso ? 'Rimborso' : 'Spesa'}</div>
-        <div>Modificare i campi per la spesa selezionata</div>
+        <div class="text-4xl text-primary">{nosave? 'Visualizza' : 'Modifica'} {isrimborso ? 'Rimborso' : 'Spesa'}</div>
+       {#if !nosave} <div>Modificare i campi per la spesa selezionata</div> {/if}
 
         <textarea
             class="textarea textarea-bordered textarea-md w-full"
@@ -85,7 +86,7 @@
         <Search
             on:add={aggiungiQuota}
             topleftlabel={isrimborso ? 'Aggiungere gli utenti da rimborsare' : 'Cerca un utente a cui associare una quota'} />
-        <Input topleftlabel="Totale spesa" disabled value={formatCurrency(totaleCosti)} />
+        <Input topleftlabel="Totale spesa (somma delle quote)" disabled value={formatCurrency(totaleCosti)} />
 
         <table class="table table-sm p-2 shadow bg-base-100 text-center">
             <thead>
@@ -112,7 +113,7 @@
                             <input type="checkbox" disabled class="toggle" checked={quota.rimborso} />
                         </td>
                         <td
-                            >{#if i > 0}<button
+                            >{#if i > 0 && !nosave}<button
                                     on:click={() => {
                                         expense.quote.splice(i, 1);
                                         expense.quote = [...expense.quote];
@@ -123,11 +124,13 @@
                 {/each}
             </tbody><tbody> </tbody>
         </table>
+        {#if !nosave}
+            <div class="flex flex-row space-x-2 mt-4">
+                <button class="btn btn-error" on:click={eliminaSpesa}>Elimina</button>
+                <button class="btn btn-success flex-1" on:click={modificaSpesa}>Modifica</button>
+            </div>
+        {/if}
 
-        <div class="flex flex-row space-x-2 mt-4">
-            <button class="btn btn-error" on:click={eliminaSpesa}>Elimina</button>
-            <button class="btn btn-success flex-1" on:click={modificaSpesa}>Modifica</button>
-        </div>
         <div class="modal-action">
             <button
                 class="btn"

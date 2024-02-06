@@ -13,8 +13,6 @@
 </div>
 
 <div class="grid md:gap-0 grid-cols-1 items-center md:mx-24 mx-4 my-4">
-    <button class="btn btn-primary" on:click={()=>{ismodal=true}}>Aggiungi Spesa</button>
-    <Aggiungispesa open={ismodal} on:close={()=>{ismodal=false}} />
     <Table />
 </div>
 

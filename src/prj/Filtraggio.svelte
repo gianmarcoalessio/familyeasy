@@ -9,6 +9,8 @@
     let selectedYear = null;
     let months = [];
     let years = [];
+    let ismonth =false;
+    let isyear =false;
     //i due filtri che facciamo 
     let filtri = {
       year: null,
@@ -67,9 +69,12 @@
   <div class="mb-4">
     <button class="btn" on:click={() => resetFilter('all')}>Tutte</button>
     <!-- anno -->
-    <div class="dropdown">
-      <div tabindex="0" role="button" class="btn w-full">{selectedYear ? selectedYear.name : 'Seleziona un anno'}</div>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class="dropdown" on:click={()=>{isyear=!isyear}}>
+      <div tabindex="0" role="button" class="btn w-40">{selectedYear ? selectedYear.name : 'Seleziona un anno'}</div>
       <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+      {#if isyear}
       <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-full">
         {#each years as year}
           <li>
@@ -79,13 +84,17 @@
           </li>
         {/each}
       </ul>
+      {/if}
     </div>
     <!-- mesi -->
     {#if filtri.year}
-    <div class="dropdown">
-      <div tabindex="0" role="button" class="btn w-full">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class="dropdown" on:click={()=>{ismonth=!ismonth}}>
+      <div tabindex="0" role="button" class="btn w-40">
         {selectedMonth ? selectedMonth.name : 'Seleziona un mese'}
       </div>
+      {#if ismonth }
       <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
       <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-full">
         {#each months as month}
@@ -96,6 +105,7 @@
           </li>
         {/each}
       </ul>
+      {/if}
     </div>
 
     {/if}

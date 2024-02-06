@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import Categories from './db/categories.js';
 import Expenses from './db/expenses.js';
+import { get } from 'mongoose';
 
 const saltRounds = 10;
 
@@ -11,6 +12,60 @@ function checkUser(req) {
     if (!req.user) {
         throw new Error('User not authenticated');
     }
+}
+
+async function getBalance(user,user2) {
+    let spese = await Expenses.find({ "quote.user": user._id }).exec()
+    let bilancio = {
+        "dare": 0,
+        "avere": 0
+    }
+    if (spese) {
+        for (let spesa of spese) {
+            let quote = []
+            for (let q of spesa.quote) {
+                if (spesa.category.name == "Rimborso") {
+                    // trattiamo i rimborsi
+                    if (spesa.usercrea._id == user._id) {
+                        quote.push(q)
+                    } else {
+                        q.rimborso = !q.rimborso
+                        if (q.user._id == user._id) {
+                            quote.push({ "rimborso": false, "user": spesa.usercrea, "cost": q.cost })
+                            quote.push({ "rimborso": true, "user": q.user, "cost": q.cost })
+                        }
+                    }
+                } else {
+                    if (q.user._id == user._id) {
+                        quote.push(q)
+                    }
+                }
+            }
+            spesa.quote = quote
+            for (let quota of spesa.quote) {
+                if (quota.rimborso) {
+                    bilancio.avere += quota.cost;
+                } else {
+                    bilancio.dare += quota.cost;
+                }
+            }
+        }
+    }
+
+    if (user2) {
+        for(let spesa of spese){
+            spesa.quote = spesa.quote.filter(q => q.user.username == user2.username) // strano che sia solo .id e non ._id !!!
+        }
+         spese = spese.filter(s => s.quote.length > 0)
+    }
+
+
+    let risultato = {
+        bilancio: bilancio,
+        spese: spese // Aggiungi le spese al risultato
+    };
+
+    return risultato;
 }
 
 export default express.Router()
@@ -105,7 +160,7 @@ export default express.Router()
                 usercrea: user._id,
                 description: new RegExp(query, 'i') // La 'i' dopo la regex indica che la ricerca non è case-sensitive
             }).exec();
-            
+
             res.send(budgets);
         } catch (error) {
             next(error);
@@ -261,27 +316,10 @@ export default express.Router()
         try {
             checkUser(req);
             const user = req.user
-            let spese = await Expenses.find({ "quote.user": user._id }).exec()
-            let bilancio = {
-                "dare": 0,
-                "avere": 0
-            }
 
-            if (spese) {
-                for (let spesa of spese) {
-                    for (let quota of spesa.quote) {
-                        if (quota.user._id == user._id) {
-                            if (quota.rimborso) {
-                                bilancio.avere += quota.cost;
-                            } else {
-                                bilancio.dare += quota.cost;
-                            }
-                        }
-                    }
-                }
-            }
+            let result = await getBalance(user);
 
-            res.send(bilancio);
+            res.send(result);
         } catch (error) {
             next(error);
         }
@@ -290,12 +328,15 @@ export default express.Router()
     .get('/balance/:id', async (req, res, next) => {
         try {
             checkUser(req);
-            const user = User.findById(req.params.id);
+            const user2 = await User.findById(req.params.id);
+            const user = req.user
             if (!user) {
                 throw new Error("Utente non trovato");
             }
+
+            let result = await getBalance(user, user2);
             // handle getting balance by id logic here
-            res.send(user);
+            res.send(result);
         } catch (error) {
             next(error);
         }

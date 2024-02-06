@@ -2,14 +2,14 @@
     import Navigator from '$prj/Navigator.svelte';
     import IconProfile from '$svg/IconProfile.svelte';
     import {goto} from '$app/navigation';
-    import {logout,datilogin} from '$lib/servizi.js';
+    import {logout,datilogin, addError} from '$lib/servizi.js';
     
     async function logoutare() {
         try {
             await logout();
             goto("/");
         } catch (error) {
-            alert(error.response?.data?error.response.data:error.message); // non andrà mai in errore
+            addError(error.response?.data?error.response.data:error.message); // non andrà mai in errore
         }
     }
 </script>

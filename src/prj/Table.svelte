@@ -9,6 +9,7 @@
 
     let expenses = [];
     let ismodal = false;
+    let ismodalagg = false;
     let selriga ={}
     let filtri = {}
 
@@ -36,8 +37,15 @@
 </script>
 
 {#if ismodal}
-    <Spesa open bind:expense={selriga} on:close={()=>{ismodal=false}} on:reload={()=>{ismodal=false, reload()}} />
+    <Spesa open bind:expense={selriga} on:close={()=>{ismodal=false}} on:reload={()=>{ismodal=false; reload()}} />
 {/if}
+
+{#if ismodalagg}
+    <Aggiungispesa open on:close={()=>{ismodalagg=false}} on:reload={()=>{ismodalagg=false; reload()}} />
+{/if}
+
+<button class="btn btn-primary" on:click={()=>{ismodalagg=true}}>Aggiungi Spesa</button>
+
 
 <Filtraggio on:filtra={async e=>{filtri = e.detail; await reload()}}  />
 
@@ -81,7 +89,7 @@
                     {/if}
                 </td>
                 <td>{expense.description}</td>
-                <td>{expense.category.name}</td>
+                <td><div class="badge badge-secondary">{expense.category.name}</div></td>
             </tr>
         {/each}
     </tbody>

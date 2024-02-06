@@ -87,14 +87,14 @@ export async function dammiCategorie() {
 
 export async function dammiSpese(filtri) {
     try {
-        let url = `${baseurl}/api/budget`;
+        let url = `${baseurl}/api/budget/`;
         if(filtri.year) {
-            url += `/${filtri.year}`;
+            url += `${filtri.year}`;
             if(filtri.month) {
-                url += `/${filtri.month}`;
+                url += `${filtri.month}`;
             }
         }else if(filtri.q){
-            url += `/search?q=${encodeURIComponent(filtri.q)}`;
+            url += `search?q=${encodeURIComponent(filtri.q)}`;
         }
 
         const response = await axios.get(url, getconfig());
@@ -106,17 +106,12 @@ export async function dammiSpese(filtri) {
 
 }
 
-export async function dammiQuote(filtri) {
+export async function dammiQuote(utente) {
     try {
         let url = `${baseurl}/api/balance`;
-        // if(filtri.year) {
-        //     url += `/${filtri.year}`;
-        //     if(filtri.month) {
-        //         url += `/${filtri.month}`;
-        //     }
-        // }else if(filtri.q){
-        //     url += `/search?q=${encodeURIComponent(filtri.q)}`;
-        // }
+        if (utente && utente._id) {
+            url += `/${utente._id}`;
+        }
 
         const response = await axios.get(url, getconfig());
         return response.data;

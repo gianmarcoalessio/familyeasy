@@ -1,6 +1,6 @@
 <script>
     import Input from '$daisi/Input.svelte';
-    import {creaUtente} from '$lib/servizi.js';
+    import {creaUtente,addError} from '$lib/servizi.js';
     import {goto} from '$app/navigation';
 
     let confermapassword = '';
@@ -19,7 +19,7 @@
             } else {
                 throw new Error('Le password non coincidono');
             }
-        } catch (error) {alert(error.response?.data?error.response.data:error.message)}
+        } catch (error) {addError(error.response?.data?error.response.data:error.message)}
     }
 </script>
 
@@ -32,5 +32,4 @@
     <Input type="password" placeholder="Conferma Password" bind:value={confermapassword} />
     <button on:click={registra} class="btn btn-primary">Conferma</button>
 
-    <pre>{JSON.stringify(user,null,2)}</pre>
 </div>

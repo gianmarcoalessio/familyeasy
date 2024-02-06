@@ -2,8 +2,10 @@
     import '../app.css';
     import Alerts from '$prj/Alerts.svelte';
     import { goto, beforeNavigate } from '$app/navigation';
-    import { datilogin,setbearer } from '$lib/servizi.js';
+    import { datilogin, setbearer } from '$lib/servizi.js';
     import { onMount } from 'svelte';
+
+    let valid = false;
 
     onMount(() => {
         let tm = JSON.parse(localStorage.getItem('token') || '{}'); //prendiamo il token
@@ -11,6 +13,8 @@
             setbearer(tm.token); // memorizzo il token di autenticazione
             $datilogin = tm; // memorizzo i dati dell'utente loggato
         }
+
+        valid = true
 
         if (!$datilogin.token) {
             goto('/');
@@ -27,7 +31,10 @@
     });
 </script>
 
-<slot />
+{#if valid}
+    <slot />
+{/if}
+
 <div class="absolute top-2 left-[50%]">
     <Alerts />
 </div>

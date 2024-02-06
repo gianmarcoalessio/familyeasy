@@ -1,5 +1,5 @@
 {
-	"name": "my-app",
+	"name": "app-alessio",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
@@ -28,6 +28,7 @@
 		"dotenv": "^16.4.1",
 		"express": "^4.18.2",
 		"jsonwebtoken": "^9.0.2",
-		"mongoose": "^8.1.1"
+		"mongoose": "^8.1.1",
+		"mongoose-auto-increment": "^5.0.1"
 	}
 }
