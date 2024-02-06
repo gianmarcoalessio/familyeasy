@@ -2,11 +2,12 @@ import express from 'express'  // ES6 syntax instead of using const express = re
 import api from './srcbk/api.js'
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser'
-import cors from 'cors'
+import cors from 'cors' // DEVELOPMENT ONLY
 import jwt from 'jsonwebtoken'
 import "dotenv/config";
 import { handler } from './build/handler.js'
-const DBCONN = 'mongodb://localhost/familyeasy'
+//const DBCONN = 'mongodb://localhost/familyeasy'
+const DBCONN = process.env.DB_CONN
 const app = express()
 app.use(cors()); //per chiamare localhost8000 da localhost3000, controllo che fanno i browser per la sicurezza solo per il debug perché quando siamo in RUN cors non serve più
 app.use(express.json());
@@ -45,7 +46,8 @@ app.use((err, req, res, next) => {
     next();
   }
 })
-// app.use('/', express.static("./public"));
+
+app.use('/', express.static("./srcbk/public"));
 app.use(handler);
 
 app.listen(3000, async () => {

@@ -8,13 +8,19 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install the app dependencies
-RUN npm install
+RUN yarn
 
 # Copy the rest of the app's source code to the working directory
-COPY ./server .
+COPY ./srcbk .
+
+COPY server.js .
+
+# Per inserire i dati nel database
+COPY dbtest.js .
+COPY dbtest.json .
 
 # Expose port 3000 for the app
 EXPOSE 3000
 
 # Define the command to run the app
-CMD [ "node", "index.js" ]
+CMD [ "node", "server.js" ]

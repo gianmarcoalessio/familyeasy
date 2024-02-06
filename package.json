@@ -6,10 +6,11 @@
 		"dev": "vite dev --port 8000",
 		"build": "vite build",
 		"preview": "vite preview",
-		"serve": "nodemon server"
+		"serve": "node --watch server"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "^4.0.1",
+		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"autoprefixer": "^10.4.17",

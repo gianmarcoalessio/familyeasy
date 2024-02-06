@@ -6,6 +6,7 @@ export const datilogin = writable({}); // user è un oggetto che contiene i dati
 export const messaggi = writable([]); // messaggi è un array che contiene i messaggi da visualizzare, guardare svelte store
 
 let baseurl = dev ? "http://localhost:3000" : "" // mi indica che sono in un ambiente di sviluppo 
+//let baseurl = ""  // mi indica che sono in un ambiente di sviluppo
 let bearer = null; // bearer è una variabi3le che mi serve per memorizzare il token di autenticazione
 
 

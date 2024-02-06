@@ -6,7 +6,8 @@ import fs from "fs";
 
 var users = {};
 var cats = {};
-const DBCONN = 'mongodb://localhost/familyeasy'
+// const DBCONN = 'mongodb://localhost/familyeasy'
+const DBCONN = process.env.DB_CONN
 
 
 function getuserid(u) {
