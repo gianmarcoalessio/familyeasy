@@ -2,15 +2,15 @@ import express from 'express'  // ES6 syntax instead of using const express = re
 import api from './srcbk/api.js'
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser'
-//import cors from 'cors' // DEVELOPMENT ONLY
 import jwt from 'jsonwebtoken'
 import "dotenv/config";
-//import { handler } from './build/handler.js' // dev only se no mi da errore in fase di deploy (manca mongoose) e mongoose autoincrement
- import { handler } from './srcbk/public/handler.js'
-//const DBCONN = 'mongodb://localhost/familyeasy' // dev
-const DBCONN = process.env.DB_CONN // deployment only with docker
+import cors from 'cors' // DEVELOPMENT ONLY
+import { handler } from './build/handler.js' // dev only se no mi da errore in fase di deploy (manca mongoose) e mongoose autoincrement
+//import { handler } from './srcbk/public/handler.js'
+const DBCONN = 'mongodb://localhost/familyeasy' // dev
+//const DBCONN = process.env.DB_CONN // deployment only with docker
 const app = express()
-//app.use(cors()); //per chiamare localhost8000 da localhost3000, controllo che fanno i browser per la sicurezza solo per il debug perché quando siamo in RUN cors non serve più
+app.use(cors()); //per chiamare localhost8000 da localhost3000, controllo che fanno i browser per la sicurezza solo per il debug perché quando siamo in RUN cors non serve più
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))  // It parses incoming requests with URL-encoded payloads and is based on a body parser
 app.use(bodyParser.json({ limit: '4mb' })); //middleware per leggere i parametri passati in post, sicurezze per il servizio

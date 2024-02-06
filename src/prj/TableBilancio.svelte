@@ -43,7 +43,7 @@
     <Spesa nosave open bind:expense={selriga} on:close={()=>{ismodal=false}} on:reload={()=>{ismodal=false, reload()}} />
 {/if} 
 
-<div class="flex md:flex-row flex-col space-y-8 md:space-x-24 justify-center items-center my-8 ">
+<div class="flex md:flex-row flex-col space-y-8 md:space-y-0 md:space-x-24 justify-center items-center my-8 ">
     <div class="flex flex-col items-center space-y-4 justify-center">
         <div class="text-5xl">Dare</div>
         <div class="text-5xl text-error font-bold">{formatCurrency(bilancio.dare)}</div>
