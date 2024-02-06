@@ -4,17 +4,16 @@ services:
   app:
     container_name: app-alessio
     build: .
-    command: sh -c "node dbtest && node server.js"
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
-      - /node_modules
+    # volumes:
+    #  - ./app:/usr/src/app
     depends_on:
       - mongo
     environment:
       - JWT_SECRET='secret'
       - DB_CONN=mongodb://mongo/familyeasy
+    command: sh -c "node dbtest && node server.js"
 
   mongo:
     container_name: mongodb-alessio

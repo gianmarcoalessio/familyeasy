@@ -13,7 +13,7 @@
 <div class="flex flex-row items-center justify-between px-2 md:px-0">
   <div class="text-4xl font-bold text-primary">Family-easy</div>
 
-  <ul class="menu bg-base-200 hidden lg:menu-horizontal rounded-box">
+  <ul class="menu bg-base-200 menu-horizontal rounded-box">
     {#each [['/profilo', IconProfile], ['/spese', IconExpense], ['/bilancio', IconPig]] as [link, Icon]}
       <li>
         <button on:click={() => goto(link)} class:active={$path === link} >

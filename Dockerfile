@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN yarn
 
 # Copy the rest of the app's source code to the working directory
-COPY ./srcbk .
+COPY ./srcbk ./srcbk
 
 COPY server.js .
 
