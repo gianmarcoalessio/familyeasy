@@ -1,35 +1,36 @@
-# Familyeasy app
+# Familyeasy App
 
-## Database di test per provare la piattaforma
+In rifenrimento al documento di esame "[Progetto di Programmazione Web](https://docs.google.com/document/d/1KbCtTKKtEkzpXYBExV0OU1v7W09rpzOCk7XPn9sSem0/edit#heading=h.ccj6mdt2qp5)" (A.A. 2023/2024), si presenta l'applicazione Familyeasy, una piattaforma per la gestione delle spese familiari.
 
-Per caricare i dati sul database usare il seguente script:
+## Database di Test per Provare la Piattaforma
+
+Per caricare i dati sul database, utilizzare il seguente script:
 
 ```bash
 node dbtest
 ```
 
-Dopo di che collegarsi con l'utente:
+Successivamente, è possibile accedere con l'utente:
 
 - Username: jaker
 - Password: Pass1234
 
-Per la ricerca di ulteriori utenti, si elencono gli username per facilitare il test dell'applicazione:
+Per facilitare il test dell'applicazione, si fornisce una lista di username aggiuntivi:
 
 ```bash
 mikew, sully, randall, boo
 ```
 
-## Specifiche
+## Specifiche Tecniche
 
-- FrontEnd: Sveltejs, tailwindcss, daisyUI
-- BackEnd: Node.js, express, axios, jwt, mongodb, mongoose 
+- **FrontEnd:** SvelteJS, TailwindCSS, DaisyUI
+- **BackEnd:** Node.js, Express, Axios, JWT, MongoDB, Mongoose
 
-## Note 
+## Note Importanti
 
-- Il costo totale della spesa è calcolato dalle quote inserite (Aggiungispesa.svelte).
-- Dentro la cartella prj (e.g. Table.svelte) sono elencate le componenti utilizzate per l'applicazione.
-- Il rimborso implica che il costo totale sia zero e la quota del user loggato e calcolata in base alle quote(rimborso) degli utenti inseriti. La quota dell'user loggato in tal caso è considerata una spesa (dare) rivolta all'utente inserito (Search.svelte nella componente Spesa.svelte)
-- I servizi si trovano dentro `src/lib/servizi.js` mentre le API rest dentro `srcbk/api.js`
-- È presente una route verso una pagina di test utilizzata per i test.
-- Gli schema del database sono definite dentro: `srcbk/db/categories.js`, `srcbk/db/expenses.js`,`srcbk/db/users.js` 
-  
+- Il costo totale della spesa viene calcolato sommando le quote inserite (componente `Aggiungispesa.svelte`).
+- Le componenti utilizzate nell'applicazione sono elencate nella cartella `prj` (ad esempio, `Table.svelte`).
+- Il rimborso implica un costo totale pari a zero, con la quota dell'utente loggato calcolata in base alle quote degli altri utenti inseriti. In questo caso, la quota dell'utente loggato è considerata una spesa ("dare") rivolta agli utenti inseriti (componente `Search.svelte` nella `Spesa.svelte`).
+- I servizi sono localizzati nel file `src/lib/servizi.js`, mentre le API REST si trovano in `srcbk/api.js`.
+- È stata implementata una route verso una pagina di test utilizzata per i test.
+- Gli schemi del database sono definiti nei file: `srcbk/db/categories.js`, `srcbk/db/expenses.js`, `srcbk/db/users.js`.
